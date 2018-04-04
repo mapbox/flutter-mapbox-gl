@@ -1,0 +1,61 @@
+group 'com.example.fluttermapbox'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.0'
+    }
+}
+
+rootProject.allprojects { project ->
+    repositories {
+        flatDir {
+            dirs rootProject.projectDir.absolutePath + '/../../android/libs'
+            dirs rootProject.projectDir.absolutePath + '/libs'
+        }
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 16
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dependencies {
+        implementation(name: 'MapboxGLAndroidSDK-debug', ext: 'aar')
+
+        implementation "com.mapbox.mapboxsdk:mapbox-android-telemetry:3.0.0-beta.2"
+        implementation "com.mapbox.mapboxsdk:mapbox-sdk-services:3.0.0-beta.4"
+        implementation "com.mapbox.mapboxsdk:mapbox-sdk-geojson:3.0.0-beta.4"
+        implementation "com.mapbox.mapboxsdk:mapbox-android-gestures:0.1.0"
+        implementation "com.jakewharton.timber:timber:4.6.1"
+        implementation "com.squareup.okhttp3:okhttp:3.10.0"
+        implementation "com.android.support:support-annotations:27.1.0"
+        implementation "com.android.support:appcompat-v7:27.1.0"
+        implementation "com.android.support:support-fragment:27.1.0"
+        implementation "com.android.support:design:27.1.0"
+        implementation "com.android.support:recyclerview-v7:27.1.0"
+        implementation "com.mapzen.android:lost:3.0.4"
+        implementation "com.google.android.gms:play-services-location:12.0.1"
+    }
+}
