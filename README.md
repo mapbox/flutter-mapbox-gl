@@ -5,8 +5,7 @@ This plugin is an attempt to implement a native Flutter widget which uses Mapbox
 ![screenshot.png](screenshot.png)
 
 **Notes**
-- It is in the very early development stage and only works on Android fow now. 
-- It also requires a custom build of Mapbox Native GL SDK.
+- It is in the very early development stage and only works on Android fow now.
 
 ## Getting Started
 

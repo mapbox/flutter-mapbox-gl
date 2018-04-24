@@ -82,9 +82,9 @@ class MapboxMap  {
 
   Future<int> create({double width, double height, MapboxMapOptions options}) async {
     try {
-      final Map<String, dynamic> reply = await _channel.invokeMethod(
+      final Map<Object, Object> reply = await _channel.invokeMethod(
         'create',
-        <String, dynamic>{
+        <String, Object>{
           'width': width,
           'height': height,
           'options': options.toMap()
@@ -103,7 +103,7 @@ class MapboxMap  {
     try {
       await _channel.invokeMethod(
         'moveBy',
-        <String, dynamic>{
+        <String, Object>{
           'textureId': _textureId,
           'dx': dx,
           'dy': dy,
@@ -119,7 +119,7 @@ class MapboxMap  {
     try {
       await _channel.invokeMethod(
         'zoom',
-        <String, dynamic>{
+        <String, Object>{
           'textureId': _textureId,
           'zoom': zoom,
           'x': x,
@@ -136,7 +136,7 @@ class MapboxMap  {
     try {
       await _channel.invokeMethod(
         'zoomBy',
-        <String, dynamic>{
+        <String, Object>{
           'textureId': _textureId,
           'zoomBy': zoomBy,
           'x': x,
@@ -153,7 +153,7 @@ class MapboxMap  {
     try {
       final Map<String, dynamic> reply = await _channel.invokeMethod(
         'getZoom',
-        <String, dynamic>{
+        <String, Object>{
           'textureId': _textureId
         },
       );
@@ -168,7 +168,7 @@ class MapboxMap  {
     try {
       await _channel.invokeMethod(
         'dispose',
-        <String, dynamic>{
+        <String, Object>{
           'textureId': _textureId
         },
       );

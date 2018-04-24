@@ -7,7 +7,6 @@ import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.Map;
 import java.util.HashMap;
