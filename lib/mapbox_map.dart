@@ -151,7 +151,7 @@ class MapboxMap  {
 
   Future<double> getZoom() async {
     try {
-      final Map<String, dynamic> reply = await _channel.invokeMethod(
+      final Map<Object, Object> reply = await _channel.invokeMethod(
         'getZoom',
         <String, Object>{
           'textureId': _textureId
