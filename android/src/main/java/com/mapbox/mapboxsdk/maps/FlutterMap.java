@@ -17,13 +17,15 @@ public class FlutterMap implements NativeMapView.ViewCallback,
   private MapboxMapOptions mapboxMapOptions;
   private NativeMapView nativeMapView;
   private MapRenderer mapRenderer;
+  private Double devicePixelRatio;
   private int width;
   private int height;
 
   public FlutterMap(Context context, MapboxMapOptions options,
-                    SurfaceTexture surfaceTexture, int width, int height) {
+                    SurfaceTexture surfaceTexture, Double devicePixelRatio, int width, int height) {
     this.context = context;
     this.mapboxMapOptions = options;
+    this.devicePixelRatio = devicePixelRatio;
     this.width = width;
     this.height = height;
 
@@ -31,7 +33,7 @@ public class FlutterMap implements NativeMapView.ViewCallback,
     boolean translucentSurface = mapboxMapOptions.getTranslucentTextureSurface();
     mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily, translucentSurface);
 
-    nativeMapView = new NativeMapView(context, 1, this, mapRenderer);
+    nativeMapView = new NativeMapView(context, devicePixelRatio, this, mapRenderer);
     nativeMapView.addOnMapChangedListener(this);
     nativeMapView.setStyleUrl(mapboxMapOptions.getStyle());
     nativeMapView.resizeView(width, height);
