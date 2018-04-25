@@ -31,9 +31,8 @@ public class FlutterMap implements NativeMapView.ViewCallback,
     boolean translucentSurface = mapboxMapOptions.getTranslucentTextureSurface();
     mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily, translucentSurface);
 
-    nativeMapView = new NativeMapView(context, this, mapRenderer);
+    nativeMapView = new NativeMapView(context, 1, this, mapRenderer);
     nativeMapView.addOnMapChangedListener(this);
-
     nativeMapView.setStyleUrl(mapboxMapOptions.getStyle());
     nativeMapView.resizeView(width, height);
     nativeMapView.setReachability(ConnectivityReceiver.instance(context).isConnected(context));
