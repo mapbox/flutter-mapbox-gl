@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -25,8 +26,11 @@ class MapViewState extends State<MapView> {
   Future<Null> _createMapView(Size size, MapboxMapOptions options) async {
     _size = size;
     try {
-      int textureId = await widget.map
-          .create(width: size.width, height: size.height, options: options);
+      int textureId = await widget.map.create(
+          devicePixelRatio: window.devicePixelRatio,
+          width: size.width,
+          height: size.height,
+          options: options);
 
       if (!mounted) {
         return;

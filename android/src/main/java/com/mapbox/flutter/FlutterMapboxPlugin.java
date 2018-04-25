@@ -119,12 +119,13 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     switch (call.method) {
       case "create": {
         FlutterView.SurfaceTextureEntry surfaceTextureEntry = view.createSurfaceTexture();
+        final Double devicePixelRatio = ((Number)call.argument("devicePixelRatio")).doubleValue();
         final int width = ((Number)call.argument("width")).intValue();
         final int height = ((Number)call.argument("height")).intValue();
         final MapboxMapOptions options = parseOptions((Map<String, Object>)call.argument("options"));
         SurfaceTexture surfaceTexture = surfaceTextureEntry.surfaceTexture();
         surfaceTexture.setDefaultBufferSize(width, height);
-        FlutterMap mapView = new FlutterMap(activity, options, surfaceTexture, width, height);
+        FlutterMap mapView = new FlutterMap(activity, options, surfaceTexture, devicePixelRatio, width, height);
         mapView.onStart();
         mapView.onResume();
 
