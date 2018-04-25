@@ -1,23 +1,15 @@
-# MapBox for Flutter
+# Flutter Mapbox GL Native
 
-This plugin is an attempt to implement a native Flutter widget which uses Mapbox SDK to render the map.
+A flutter plugin for [mapbox-gl-native](https://github.com/mapbox/mapbox-gl-native) that allows to
+ embed interactive, customizable vector maps inside a flutter widget. Early development stage, only Android is supported for now.
 
 ![screenshot.png](screenshot.png)
 
-**Notes**
-- It is in the very early development stage and only works on Android fow now.
-
 ## Getting Started
+### Android
 
-To build this plugin and the example, you need to register a MapBox Access Token.
-
-Then, create a **local.properties** file in the **example/android** folder with the following content:
-
-```
-mapbox.accessToken="YOUR MAPBOX ACCESS TOKEN"
-```
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
-
-For help on editing plugin code, view the [documentation](https://flutter.io/platform-plugins/#edit-code).
+- Install [flutter](https://flutter.io/get-started/) and validate installation with `flutter doctor`
+- Clone repository  with `git clone git@github.com:mapbox/flutter-mapbox-gl.git`
+- Add `mapbox.accessToken="YOUR MAPBOX ACCESS TOKEN"`
+ token to **flutter_mapbox/example/android/local.properties** 
+- Run app with `cd flutter_mapbox/example && flutter run`
