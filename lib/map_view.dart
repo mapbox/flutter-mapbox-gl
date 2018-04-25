@@ -42,13 +42,13 @@ class MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     return new LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constrains) {
-      if (constrains.biggest.isEmpty) {
+        builder: (BuildContext context, BoxConstraints constraints) {
+      if (constraints.biggest.isEmpty) {
         return new Container();
       }
 
       if (!_initialized) {
-        _createMapView(constrains.biggest, widget.options);
+        _createMapView(constraints.biggest, widget.options);
 
         _initialized = true;
         return new Container();
