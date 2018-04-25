@@ -152,7 +152,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
       if (maps.containsKey(textureId)) {
 
         double angle = doubleParamOfCall(call, "angle");
-        LatLng center = parseLatLng((Map<String, Object>) call.get("center"));
+        LatLng center = parseLatLng((Map<String, Object>) call.argument("center"));
         long duration = longParamOfCall(call, "duration");
         double pitch = doubleParamOfCall(call, "pitch");
         double zoom = doubleParamOfCall(call, "zoom");

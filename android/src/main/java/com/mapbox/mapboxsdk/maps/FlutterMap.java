@@ -10,6 +10,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
 import com.mapbox.mapboxsdk.storage.FileSource;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
 public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChangedListener {
   private Context context;
