@@ -10,7 +10,8 @@ class Style {
   static final String light = "mapbox://styles/mapbox/light-v9";
   static final String dark = "mapbox://styles/mapbox/dark-v9";
   static final String satellite = "mapbox://styles/mapbox/satellite-v9";
-  static final String satelliteStreets = "mapbox://styles/mapbox/satellite-streets-v10";
+  static final String satelliteStreets =
+      "mapbox://styles/mapbox/satellite-streets-v10";
   static final String trafficDay = "mapbox://styles/mapbox/traffic-day-v2";
   static final String trafficNight = "mapbox://styles/mapbox/traffic-night-v2";
 }
@@ -19,13 +20,10 @@ class LatLng {
   final double lat;
   final double lng;
 
-  LatLng({ this.lat, this.lng});
+  LatLng({this.lat, this.lng});
 
   Map<String, Object> toMap() {
-    return {
-      "lat": lat,
-      "lng": lng
-    };
+    return {"lat": lat, "lng": lng};
   }
 }
 
@@ -35,22 +33,17 @@ class CameraPosition {
   final double bearing;
   final double tilt;
 
-  CameraPosition({ this.target, this.zoom, this.bearing, this.tilt });
+  CameraPosition({this.target, this.zoom, this.bearing, this.tilt});
 
-  CameraPosition copyWith({
-    LatLng target,
-    double zoom,
-    double bearing,
-    double tilt
-  }) {
-
+  CameraPosition copyWith(
+      {LatLng target, double zoom, double bearing, double tilt}) {
     LatLng newTarget = target ?? this.target;
     double newZoom = zoom ?? this.zoom;
     double newBearing = bearing ?? this.bearing;
     double newTilt = tilt ?? this.tilt;
 
-    return new CameraPosition(target: newTarget,
-        zoom: newZoom, bearing: newBearing, tilt: newTilt);
+    return new CameraPosition(
+        target: newTarget, zoom: newZoom, bearing: newBearing, tilt: newTilt);
   }
 
   Map<String, Object> toMap() {
@@ -67,20 +60,16 @@ class MapboxMapOptions {
   final String style;
   final CameraPosition camera;
 
-  MapboxMapOptions({ this.style, this.camera });
+  MapboxMapOptions({this.style, this.camera});
 
   Map<String, Object> toMap() {
-    return {
-      "style": style,
-      "camera": camera.toMap()
-    };
+    return {"style": style, "camera": camera.toMap()};
   }
 }
 
-class MapboxMap  {
-  int _textureId;
-
-  Future<int> create({double width, double height, MapboxMapOptions options}) async {
+class MapboxMap {
+  Future<int> create(
+      {double width, double height, MapboxMapOptions options}) async {
     try {
       final Map<Object, Object> reply = await _channel.invokeMethod(
         'create',
@@ -90,16 +79,15 @@ class MapboxMap  {
           'options': options.toMap()
         },
       );
-      _textureId = reply['textureId'];
 
-      return new Future.value(_textureId);
-
+      return new Future.value(reply['textureId']);
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
   }
 
-  Future<Null> moveBy(double dx, double dy, int duration) async {
+  Future<Null> moveBy(
+      int _textureId, double dx, double dy, int duration) async {
     try {
       await _channel.invokeMethod(
         'moveBy',
@@ -115,7 +103,8 @@ class MapboxMap  {
     }
   }
 
-  Future<Null> zoom(double zoom, double x, double y, int duration) async {
+  Future<Null> zoom(
+      int _textureId, double zoom, double x, double y, int duration) async {
     try {
       await _channel.invokeMethod(
         'zoom',
@@ -132,7 +121,8 @@ class MapboxMap  {
     }
   }
 
-  Future<Null> zoomBy(double zoomBy, double x, double y, int duration) async {
+  Future<Null> zoomBy(
+      int _textureId, double zoomBy, double x, double y, int duration) async {
     try {
       await _channel.invokeMethod(
         'zoomBy',
@@ -149,28 +139,23 @@ class MapboxMap  {
     }
   }
 
-  Future<double> getZoom() async {
+  Future<double> getZoom(int _textureId) async {
     try {
       final Map<Object, Object> reply = await _channel.invokeMethod(
         'getZoom',
-        <String, Object>{
-          'textureId': _textureId
-        },
+        <String, Object>{'textureId': _textureId},
       );
       return reply['zoom'];
-
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
   }
 
-  Future<Null> dispose() async {
+  Future<Null> dispose(int _textureId) async {
     try {
       await _channel.invokeMethod(
         'dispose',
-        <String, Object>{
-          'textureId': _textureId
-        },
+        <String, Object>{'textureId': _textureId},
       );
     } on PlatformException catch (e) {
       return new Future.error(e);
