@@ -11,7 +11,8 @@ import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
 import com.mapbox.mapboxsdk.storage.FileSource;
 
-public class FlutterMap implements NativeMapView.ViewCallback {
+public class FlutterMap implements NativeMapView.ViewCallback,
+    MapView.OnMapChangedListener {
   private Context context;
   private MapboxMapOptions mapboxMapOptions;
   private NativeMapView nativeMapView;
@@ -31,6 +32,8 @@ public class FlutterMap implements NativeMapView.ViewCallback {
     mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily, translucentSurface);
 
     nativeMapView = new NativeMapView(context, this, mapRenderer);
+    nativeMapView.addOnMapChangedListener(this);
+
     nativeMapView.setStyleUrl(mapboxMapOptions.getStyle());
     nativeMapView.resizeView(width, height);
     nativeMapView.setReachability(ConnectivityReceiver.instance(context).isConnected(context));
@@ -43,16 +46,24 @@ public class FlutterMap implements NativeMapView.ViewCallback {
     }
   }
 
+  @Override
   public int getWidth() {
     return width;
   }
 
+  @Override
   public int getHeight() {
     return height;
   }
 
+  @Override
   public Bitmap getViewContent() {
     return null;
+  }
+
+  @Override
+  public void onMapChanged(int change) {
+
   }
 
   public void onStart() {
