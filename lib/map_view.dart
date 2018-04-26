@@ -66,9 +66,9 @@ class MapViewState extends State<MapView> {
   }
 
   void _onDoubleTap() {
-    widget.map.getZoom().then((zoom) {
+    widget.map.getZoom(_textureId).then((zoom) {
       zoom++;
-      widget.map.zoom(zoom, _size.width / 2, _size.height / 2, 350);
+      widget.map.zoom(_textureId, zoom, _size.width / 2, _size.height / 2, 350);
     });
   }
 
@@ -79,7 +79,7 @@ class MapViewState extends State<MapView> {
 
   void _onScaleUpdate(ScaleUpdateDetails details) {
     final Offset delta = details.focalPoint - _scaleStartFocal;
-    widget.map.moveBy(delta.dx, delta.dy, 0);
+    widget.map.moveBy(_textureId, delta.dx, delta.dy, 0);
 
     if (details.scale != 1.0) {
       RenderBox renderBox = context.findRenderObject();
@@ -87,7 +87,7 @@ class MapViewState extends State<MapView> {
 
       double newZoom = _zoomLevel(details.scale);
       double _zoomBy = newZoom - _zoom;
-      widget.map.zoomBy(_zoomBy, focalPoint.dx, focalPoint.dy, 0);
+      widget.map.zoomBy(_textureId, _zoomBy, focalPoint.dx, focalPoint.dy, 0);
 
       _zoom = newZoom;
     }

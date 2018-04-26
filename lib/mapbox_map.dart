@@ -78,8 +78,6 @@ class MapboxMapOptions {
 }
 
 class MapboxMap  {
-  int _textureId;
-
   Future<int> create({double width, double height, MapboxMapOptions options}) async {
     try {
       final Map<Object, Object> reply = await _channel.invokeMethod(
@@ -90,16 +88,15 @@ class MapboxMap  {
           'options': options.toMap()
         },
       );
-      _textureId = reply['textureId'];
 
-      return new Future.value(_textureId);
+      return new Future.value(reply['textureId']);
 
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
   }
 
-  Future<Null> moveBy(double dx, double dy, int duration) async {
+  Future<Null> moveBy(int _textureId, double dx, double dy, int duration) async {
     try {
       await _channel.invokeMethod(
         'moveBy',
@@ -115,7 +112,7 @@ class MapboxMap  {
     }
   }
 
-  Future<Null> zoom(double zoom, double x, double y, int duration) async {
+  Future<Null> zoom(int _textureId, double zoom, double x, double y, int duration) async {
     try {
       await _channel.invokeMethod(
         'zoom',
@@ -132,7 +129,7 @@ class MapboxMap  {
     }
   }
 
-  Future<Null> zoomBy(double zoomBy, double x, double y, int duration) async {
+  Future<Null> zoomBy(int _textureId, double zoomBy, double x, double y, int duration) async {
     try {
       await _channel.invokeMethod(
         'zoomBy',
@@ -149,7 +146,7 @@ class MapboxMap  {
     }
   }
 
-  Future<double> getZoom() async {
+  Future<double> getZoom(int _textureId) async {
     try {
       final Map<Object, Object> reply = await _channel.invokeMethod(
         'getZoom',
@@ -164,7 +161,7 @@ class MapboxMap  {
     }
   }
 
-  Future<Null> dispose() async {
+  Future<Null> dispose(int _textureId) async {
     try {
       await _channel.invokeMethod(
         'dispose',
