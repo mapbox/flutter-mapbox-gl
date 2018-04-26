@@ -96,8 +96,18 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
     nativeMapView.moveBy(dx, dy, duration);
   }
 
-  public void flyTo(double angle, LatLng center, long duration, double pitch, double zoom) {
-    nativeMapView.flyTo(angle, center, duration, pitch, zoom);
+  public void easeTo(CameraPosition cameraPosition, int duration, boolean easingInterpolator) {
+    nativeMapView.easeTo(cameraPosition.bearing, cameraPosition.target, duration, cameraPosition.tilt,
+        cameraPosition.zoom, easingInterpolator);
+  }
+
+  public void flyTo(CameraPosition cameraPosition, int duration) {
+    nativeMapView.flyTo(cameraPosition.bearing, cameraPosition.target, duration, cameraPosition.tilt,
+        cameraPosition.zoom);
+  }
+
+  public void jumpTo(CameraPosition cameraPosition) {
+    nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target, cameraPosition.tilt, cameraPosition.zoom);
   }
 
   public double getZoom() {

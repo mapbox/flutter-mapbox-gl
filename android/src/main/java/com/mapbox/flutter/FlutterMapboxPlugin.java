@@ -147,18 +147,43 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
       break;
     }
 
+    case "easeTo": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+
+        CameraPosition cameraPosition = parseCamera(call.argument("camera"));
+        int duration = intParamOfCall(call, "duration");
+        boolean easingInterpolator = booleanParamOfCall(call, "easingInterpolator");
+
+        MapInstance mapHolder = maps.get(textureId);
+        mapHolder.map.easeTo(cameraPosition, duration, easingInterpolator);
+      }
+      result.success(null);
+      break;
+    }
+
     case "flyTo": {
       long textureId = textureIdOfCall(call);
       if (maps.containsKey(textureId)) {
 
-        double angle = doubleParamOfCall(call, "angle");
-        LatLng center = parseLatLng((Map<String, Object>) call.argument("center"));
-        long duration = longParamOfCall(call, "duration");
-        double pitch = doubleParamOfCall(call, "pitch");
-        double zoom = doubleParamOfCall(call, "zoom");
+        CameraPosition cameraPosition = parseCamera(call.argument("camera"));
+        int duration = intParamOfCall(call, "duration");
 
         MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.flyTo(angle, center, duration, pitch, zoom);
+        mapHolder.map.flyTo(cameraPosition, duration);
+      }
+      result.success(null);
+      break;
+    }
+
+    case "jumpTo": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+
+        CameraPosition cameraPosition = parseCamera(call.argument("camera"));
+
+        MapInstance mapHolder = maps.get(textureId);
+        mapHolder.map.jumpTo(cameraPosition);
       }
       result.success(null);
       break;
@@ -223,12 +248,20 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     }
   }
 
+  private boolean booleanParamOfCall(MethodCall call, String param) {
+    return Boolean.parseBoolean(call.argument(param));
+  }
+
   private double doubleParamOfCall(MethodCall call, String param) {
     return ((Number) call.argument(param)).doubleValue();
   }
 
   private float floatParamOfCall(MethodCall call, String param) {
     return ((Number) call.argument(param)).floatValue();
+  }
+
+  private int intParamOfCall(MethodCall call, String param) {
+    return ((Number) call.argument(param)).intValue();
   }
 
   private long longParamOfCall(MethodCall call, String param) {

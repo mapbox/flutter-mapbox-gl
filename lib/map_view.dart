@@ -52,6 +52,8 @@ class MapViewState extends State<MapView> {
 
         _initialized = true;
         return new Container();
+      } else {
+        widget.map.setTextureId(_textureId);
       }
 
       GestureDetector detector = new GestureDetector(

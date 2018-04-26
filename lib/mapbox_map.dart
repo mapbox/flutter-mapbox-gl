@@ -70,6 +70,10 @@ class MapboxMapOptions {
 class MapboxMap {
   int _textureId;
 
+  void setTextureId(int textureId) {
+    _textureId = textureId;
+  }
+
   Future<int> create(
       {double width, double height, MapboxMapOptions options}) async {
     try {
@@ -105,19 +109,43 @@ class MapboxMap {
     }
   }
 
-  Future<Null> flyTo(double angle, LatLng center, int duration, double pitch,
-      double zoom) async {
+  Future<Null> easeTo(
+      CameraPosition camera, int duration, bool easingInterpolator) async {
     try {
       await _channel.invokeMethod(
         'flyTo',
         <String, Object>{
           'textureId': _textureId,
-          'angle': angle,
-          'center': center.toMap(),
+          'camera': camera.toMap(),
           'duration': duration,
-          'pitch': pitch,
-          'zoom': zoom
+          'easingInterpolator': easingInterpolator
         },
+      );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<Null> flyTo(CameraPosition camera, int duration) async {
+    try {
+      await _channel.invokeMethod(
+        'flyTo',
+        <String, Object>{
+          'textureId': _textureId,
+          'camera': camera.toMap(),
+          'duration': duration
+        },
+      );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<Null> jumpTo(CameraPosition camera) async {
+    try {
+      await _channel.invokeMethod(
+        'jumpTo',
+        <String, Object>{'textureId': _textureId, 'camera': camera.toMap()},
       );
     } on PlatformException catch (e) {
       return new Future.error(e);
