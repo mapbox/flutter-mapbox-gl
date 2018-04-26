@@ -11,18 +11,17 @@ import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
 import com.mapbox.mapboxsdk.storage.FileSource;
 
-public class FlutterMap implements NativeMapView.ViewCallback,
-    MapView.OnMapChangedListener {
+public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChangedListener {
   private Context context;
   private MapboxMapOptions mapboxMapOptions;
   private NativeMapView nativeMapView;
   private MapRenderer mapRenderer;
-  private Double devicePixelRatio;
+  private Float devicePixelRatio;
   private int width;
   private int height;
 
-  public FlutterMap(Context context, MapboxMapOptions options,
-                    SurfaceTexture surfaceTexture, Double devicePixelRatio, int width, int height) {
+  public FlutterMap(Context context, MapboxMapOptions options, SurfaceTexture surfaceTexture, Float devicePixelRatio,
+      int width, int height) {
     this.context = context;
     this.mapboxMapOptions = options;
     this.devicePixelRatio = devicePixelRatio;
@@ -31,7 +30,8 @@ public class FlutterMap implements NativeMapView.ViewCallback,
 
     String localFontFamily = mapboxMapOptions.getLocalIdeographFontFamily();
     boolean translucentSurface = mapboxMapOptions.getTranslucentTextureSurface();
-    mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily, translucentSurface);
+    mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily,
+        translucentSurface);
 
     nativeMapView = new NativeMapView(context, devicePixelRatio, this, mapRenderer);
     nativeMapView.addOnMapChangedListener(this);
@@ -42,8 +42,7 @@ public class FlutterMap implements NativeMapView.ViewCallback,
 
     CameraPosition cameraPosition = mapboxMapOptions.getCamera();
     if (cameraPosition != null) {
-        nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target,
-            cameraPosition.tilt, cameraPosition.zoom);
+      nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target, cameraPosition.tilt, cameraPosition.zoom);
     }
   }
 
