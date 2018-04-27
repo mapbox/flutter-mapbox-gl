@@ -11,34 +11,28 @@ import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
 import com.mapbox.mapboxsdk.storage.FileSource;
 
-public class FlutterMap implements NativeMapView.ViewCallback,
-    MapView.OnMapChangedListener {
-  private Context context;
-  private MapboxMapOptions mapboxMapOptions;
-  private NativeMapView nativeMapView;
-  private MapRenderer mapRenderer;
-  private int width;
-  private int height;
+public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChangedListener {
+
+  private final Context context;
+  private final NativeMapView nativeMapView;
+  private final MapRenderer mapRenderer;
 
   public FlutterMap(Context context, MapboxMapOptions options,
                     SurfaceTexture surfaceTexture, int width, int height) {
     this.context = context;
-    this.mapboxMapOptions = options;
-    this.width = width;
-    this.height = height;
 
-    String localFontFamily = mapboxMapOptions.getLocalIdeographFontFamily();
-    boolean translucentSurface = mapboxMapOptions.getTranslucentTextureSurface();
+    String localFontFamily = options.getLocalIdeographFontFamily();
+    boolean translucentSurface = options.getTranslucentTextureSurface();
     mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily, translucentSurface);
 
     nativeMapView = new NativeMapView(context, 1, this, mapRenderer);
     nativeMapView.addOnMapChangedListener(this);
-    nativeMapView.setStyleUrl(mapboxMapOptions.getStyle());
+    nativeMapView.setStyleUrl(options.getStyle());
     nativeMapView.resizeView(width, height);
     nativeMapView.setReachability(ConnectivityReceiver.instance(context).isConnected(context));
     nativeMapView.update();
 
-    CameraPosition cameraPosition = mapboxMapOptions.getCamera();
+    CameraPosition cameraPosition = options.getCamera();
     if (cameraPosition != null) {
         nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target,
             cameraPosition.tilt, cameraPosition.zoom);
@@ -47,16 +41,21 @@ public class FlutterMap implements NativeMapView.ViewCallback,
 
   @Override
   public int getWidth() {
-    return width;
+    // only needed if other component requires width from NativeMapView
+    // correct integration requires notifying size changes to this class
+    throw new RuntimeException("not implemented");
   }
 
   @Override
   public int getHeight() {
-    return height;
+    // only needed if other component requires height from NativeMapView
+    // correct integration requires notifying size changes to this class
+    throw new RuntimeException("not implemented");
   }
 
   @Override
   public Bitmap getViewContent() {
+    // returns bitmap of overlain android views for snapshot integration
     return null;
   }
 
@@ -68,7 +67,6 @@ public class FlutterMap implements NativeMapView.ViewCallback,
   public void onStart() {
     ConnectivityReceiver.instance(context).activate();
     FileSource.getInstance(context).activate();
-
     mapRenderer.onStart();
   }
 
@@ -82,15 +80,14 @@ public class FlutterMap implements NativeMapView.ViewCallback,
 
   public void onStop() {
     mapRenderer.onStop();
-
     ConnectivityReceiver.instance(context).deactivate();
     FileSource.getInstance(context).deactivate();
   }
 
   public void onDestroy() {
-    // null when destroying an activity programmatically mapbox-navigation-android/issues/503
-    nativeMapView.destroy();
+    nativeMapView.removeOnMapChangedListener(this);
     mapRenderer.onDestroy();
+    nativeMapView.destroy();
   }
 
   public void moveBy(double dx, double dy, long duration) {
