@@ -22,7 +22,7 @@ class MapBoxDemo extends StatefulWidget {
 }
 
 class _MapBoxDemoState extends State<MapBoxDemo> {
-  final MapboxMap mapboxMap = new MapboxMap();
+  final MapboxOverlayController controller = new MapboxOverlayController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _MapBoxDemoState extends State<MapBoxDemo> {
             new ListTile(
               title: new Text('jumpTo New York'),
               onTap: () {
-                mapboxMap.jumpTo(new CameraPosition(
+                controller.jumpTo(new CameraPosition(
                     target: new LatLng(lat: 40.758896, lng: -73.985130),
                     zoom: 11.0,
                     bearing: 0.0,
@@ -58,7 +58,7 @@ class _MapBoxDemoState extends State<MapBoxDemo> {
             new ListTile(
               title: new Text('flyTo Melbourne'),
               onTap: () {
-                mapboxMap.flyTo(
+                controller.flyTo(
                     new CameraPosition(
                         target: new LatLng(lat: -37.8155984, lng: 144.9640312),
                         zoom: 11.0,
@@ -71,7 +71,7 @@ class _MapBoxDemoState extends State<MapBoxDemo> {
             new ListTile(
               title: new Text('easeTo Dubai'),
               onTap: () {
-                mapboxMap.easeTo(
+                controller.easeTo(
                     new CameraPosition(
                         target: new LatLng(lat: 25.276987, lng: 55.296249),
                         zoom: 11.0,
@@ -86,8 +86,8 @@ class _MapBoxDemoState extends State<MapBoxDemo> {
         ),
       ),
       body: new Container(
-        child: new MapView(
-          map: mapboxMap,
+        child: new MapboxOverlay(
+          controller: controller,
           options: new MapboxMapOptions(
             style: Style.mapboxStreets,
             camera: new CameraPosition(

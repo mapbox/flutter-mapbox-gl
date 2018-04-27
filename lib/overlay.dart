@@ -3,19 +3,19 @@ import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mapbox/mapbox_map.dart';
+import 'package:flutter_mapbox/controller.dart';
 
-class MapView extends StatefulWidget {
-  MapView({Key key, this.map, this.options}) : super(key: key);
+class MapboxOverlay extends StatefulWidget {
+  MapboxOverlay({Key key, this.controller, this.options}) : super(key: key);
 
-  final MapboxMap map;
+  final MapboxOverlayController controller;
   final MapboxMapOptions options;
 
   @override
-  State<StatefulWidget> createState() => new MapViewState();
+  State<StatefulWidget> createState() => new _MapboxOverlayState();
 }
 
-class MapViewState extends State<MapView> {
+class _MapboxOverlayState extends State<MapboxOverlay> {
   bool _initialized = false;
   int _textureId = -1;
   Offset _scaleStartFocal;
@@ -25,7 +25,7 @@ class MapViewState extends State<MapView> {
   Future<Null> _createMapView(Size size, MapboxMapOptions options) async {
     _size = size;
     try {
-      int textureId = await widget.map
+      int textureId = await widget.controller
           .create(width: size.width, height: size.height, options: options);
 
       if (!mounted) {
@@ -53,7 +53,7 @@ class MapViewState extends State<MapView> {
         _initialized = true;
         return new Container();
       } else {
-        widget.map.setTextureId(_textureId);
+        widget.controller.setTextureId(_textureId);
       }
 
       GestureDetector detector = new GestureDetector(
@@ -68,9 +68,9 @@ class MapViewState extends State<MapView> {
   }
 
   void _onDoubleTap() {
-    widget.map.getZoom().then((zoom) {
+    widget.controller.getZoom().then((zoom) {
       zoom++;
-      widget.map.zoom(zoom, _size.width / 2, _size.height / 2, 350);
+      widget.controller.zoom(zoom, _size.width / 2, _size.height / 2, 350);
     });
   }
 
@@ -81,7 +81,7 @@ class MapViewState extends State<MapView> {
 
   void _onScaleUpdate(ScaleUpdateDetails details) {
     final Offset delta = details.focalPoint - _scaleStartFocal;
-    widget.map.moveBy(delta.dx, delta.dy, 0);
+    widget.controller.moveBy(delta.dx, delta.dy, 0);
 
     if (details.scale != 1.0) {
       RenderBox renderBox = context.findRenderObject();
@@ -89,7 +89,7 @@ class MapViewState extends State<MapView> {
 
       double newZoom = _zoomLevel(details.scale);
       double _zoomBy = newZoom - _zoom;
-      widget.map.zoomBy(_zoomBy, focalPoint.dx, focalPoint.dy, 0);
+      widget.controller.zoomBy(_zoomBy, focalPoint.dx, focalPoint.dy, 0);
 
       _zoom = newZoom;
     }

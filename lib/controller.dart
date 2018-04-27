@@ -67,7 +67,7 @@ class MapboxMapOptions {
   }
 }
 
-class MapboxMap {
+class MapboxOverlayController {
   int _textureId;
 
   void setTextureId(int textureId) {
