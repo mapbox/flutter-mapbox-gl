@@ -186,6 +186,58 @@ class MapboxOverlayController {
     }
   }
 
+  Future<double> getMinZoom() async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getMinZoom',
+        <String, Object>{'textureId': _textureId},
+      );
+      return reply['zoom'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<Null> setMinZoom(double zoom) async {
+    try {
+      await _channel.invokeMethod(
+        'setMinZoom',
+        <String, Object>{
+          'textureId': _textureId,
+          'zoom': zoom,
+        },
+      );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<double> getMaxZoom() async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getMaxZoom',
+        <String, Object>{'textureId': _textureId},
+      );
+      return reply['zoom'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<Null> setMaxZoom(double zoom) async {
+    try {
+      await _channel.invokeMethod(
+        'setMaxZoom',
+        <String, Object>{
+          'textureId': _textureId,
+          'zoom': zoom,
+        },
+      );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<double> getZoom() async {
     try {
       final Map<Object, Object> reply = await _channel.invokeMethod(

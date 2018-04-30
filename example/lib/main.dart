@@ -82,6 +82,20 @@ class _MapBoxDemoState extends State<MapBoxDemo> {
                 Navigator.of(context).pop();
               },
             ),
+            new ListTile(
+              title: new Text('setMinZoom(10)'),
+              onTap: () {
+                controller.setMinZoom(10.0);
+                Navigator.of(context).pop();
+              },
+            ),
+            new ListTile(
+              title: new Text('setMaxZoom(11)'),
+              onTap: () {
+                controller.setMaxZoom(11.0);
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         ),
       ),

@@ -221,6 +221,56 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
       break;
     }
 
+    case "getMinZoom": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        MapInstance mapInstance = maps.get(textureId);
+
+        Map<String, Object> reply = new HashMap<>();
+        reply.put("zoom", mapInstance.map.getMinZoom());
+        result.success(reply);
+      }
+      result.success(null);
+      break;
+    }
+
+    case "setMinZoom": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        MapInstance mapInstance = maps.get(textureId);
+
+        double zoom = doubleParamOfCall(call, "zoom");
+        mapInstance.map.setMinZoom(zoom);
+      }
+      result.success(null);
+      break;
+    }
+
+    case "getMaxZoom": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        MapInstance mapInstance = maps.get(textureId);
+
+        Map<String, Object> reply = new HashMap<>();
+        reply.put("zoom", mapInstance.map.getMaxZoom());
+        result.success(reply);
+      }
+      result.success(null);
+      break;
+    }
+
+    case "setMaxZoom": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        MapInstance mapInstance = maps.get(textureId);
+
+        double zoom = doubleParamOfCall(call, "zoom");
+        mapInstance.map.setMaxZoom(zoom);
+      }
+      result.success(null);
+      break;
+    }
+
     case "getZoom": {
       long textureId = textureIdOfCall(call);
       if (maps.containsKey(textureId)) {
