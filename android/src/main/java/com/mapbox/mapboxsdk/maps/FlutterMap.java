@@ -110,6 +110,22 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
     nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target, cameraPosition.tilt, cameraPosition.zoom);
   }
 
+  public double getMinZoom() {
+    return nativeMapView.getMinZoom();
+  }
+
+  public void setMinZoom(double zoom) {
+    nativeMapView.setMinZoom(zoom);
+  }
+
+  public double getMaxZoom() {
+    return nativeMapView.getMaxZoom();
+  }
+
+  public void setMaxZoom(double zoom) {
+    nativeMapView.setMaxZoom(zoom);
+  }
+
   public double getZoom() {
     return nativeMapView.getZoom();
   }
