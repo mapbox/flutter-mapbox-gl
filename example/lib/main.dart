@@ -1,6 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_mapbox/flutter_mapbox.dart';
+import 'package:flutter_mapbox_example/flutter_animation.dart';
+import 'package:flutter_mapbox_example/flutter_list.dart';
+import 'package:flutter_mapbox_example/flutter_tabbar.dart';
+import 'package:flutter_mapbox_example/mapbox_camera.dart';
+import 'package:flutter_mapbox_example/mapbox_minmaxzoomlevel.dart';
 
 Future<Null> main() async {
   runApp(new MyApp());
@@ -11,107 +16,91 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
-      home: new MapBoxDemo(),
+      home: new OverviewScreen(),
     );
   }
 }
 
-class MapBoxDemo extends StatefulWidget {
-  @override
-  _MapBoxDemoState createState() => new _MapBoxDemoState();
-}
-
-class _MapBoxDemoState extends State<MapBoxDemo> {
-  final MapboxOverlayController controller = new MapboxOverlayController();
-
+// shows an expandable list of examples
+class OverviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Mapbox Flutter Demo'),
+        title: const Text('Flutter Mapbox GL'),
       ),
-      drawer: new Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the Drawer if there isn't enough vertical
-        // space to fit everything.
-        child: new ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            new DrawerHeader(
-              child: new Text('Drawer Header'),
-              decoration: new BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            new ListTile(
-              title: new Text('jumpTo New York'),
-              onTap: () {
-                controller.jumpTo(new CameraPosition(
-                    target: new LatLng(lat: 40.758896, lng: -73.985130),
-                    zoom: 11.0,
-                    bearing: 0.0,
-                    tilt: 0.0));
-                Navigator.of(context).pop();
-              },
-            ),
-            new ListTile(
-              title: new Text('flyTo Melbourne'),
-              onTap: () {
-                controller.flyTo(
-                    new CameraPosition(
-                        target: new LatLng(lat: -37.8155984, lng: 144.9640312),
-                        zoom: 11.0,
-                        bearing: 0.0,
-                        tilt: 0.0),
-                    3000);
-                Navigator.of(context).pop();
-              },
-            ),
-            new ListTile(
-              title: new Text('easeTo Dubai'),
-              onTap: () {
-                controller.easeTo(
-                    new CameraPosition(
-                        target: new LatLng(lat: 25.276987, lng: 55.296249),
-                        zoom: 11.0,
-                        bearing: 180.0,
-                        tilt: 0.0),
-                    3000,
-                    true);
-                Navigator.of(context).pop();
-              },
-            ),
-            new ListTile(
-              title: new Text('setMinZoom(9)'),
-              onTap: () {
-                controller.setMinZoom(9.0);
-                Navigator.of(context).pop();
-              },
-            ),
-            new ListTile(
-              title: new Text('setMaxZoom(11.5)'),
-              onTap: () {
-                controller.setMaxZoom(11.5);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      ),
-      body: new Container(
-        child: new MapboxOverlay(
-          controller: controller,
-          options: new MapboxMapOptions(
-            style: Style.mapboxStreets,
-            camera: new CameraPosition(
-                target: new LatLng(lat: -37.8155984, lng: 144.9640312),
-                zoom: 11.0,
-                bearing: 0.0,
-                tilt: 0.0),
-          ),
-        ),
+      body: new ListView.builder(
+        itemBuilder: (BuildContext context, int index) =>
+            new EntryItem(data[index], context),
+        itemCount: data.length,
       ),
     );
+  }
+}
+
+final List<Entry> data = <Entry>[
+  new ExpansionEntry(
+    'Mapbox API',
+    <ScreenEntry>[
+      new ScreenEntry('Camera Animations', new CameraDemo()),
+      new ScreenEntry('Min/Max Zoom Levels', new MinMaxZoomLevelDemo()),
+    ],
+  ),
+  new ExpansionEntry(
+    'Flutter integration',
+    <ScreenEntry>[
+      new ScreenEntry('Animation', new AnimationDemo()),
+      new ScreenEntry('List integration', new ListDemo()),
+      new ScreenEntry('Tabs integration', new TabBarDemo()),
+    ],
+  )
+];
+
+abstract class Entry {
+  Entry(this.title);
+
+  final String title;
+}
+
+class ScreenEntry extends Entry {
+  ScreenEntry(String title, this.screen) : super(title);
+
+  final Widget screen;
+}
+
+class ExpansionEntry extends Entry {
+  ExpansionEntry(String title, this.children) : super(title);
+
+  final List<Entry> children;
+}
+
+class EntryItem extends StatelessWidget {
+  const EntryItem(this.entry, this.context);
+
+  final Entry entry;
+  final BuildContext context;
+
+  Widget _buildTiles(Entry root) {
+    if (root is ScreenEntry) {
+      return new ListTile(
+          title: new Text(root.title),
+          onTap: () {
+            Navigator.push(
+              context,
+              new MaterialPageRoute(builder: (context) => root.screen),
+            );
+          });
+    } else {
+      return new ExpansionTile(
+        key: new PageStorageKey<Entry>(root),
+        title: new Text(root.title),
+        children: (root as ExpansionEntry).children.map(_buildTiles).toList(),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(entry);
   }
 }
