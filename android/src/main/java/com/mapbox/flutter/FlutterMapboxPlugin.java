@@ -156,6 +156,29 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
       break;
     }
 
+    case "setStyleJson": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        String styleUrl = stringParamOfCall(call, "styleJson");
+        MapInstance mapHolder = maps.get(textureId);
+        mapHolder.map.setStyleJson(styleUrl);
+      }
+      result.success(null);
+      break;
+    }
+
+    case "getStyleJson": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        MapInstance mapInstance = maps.get(textureId);
+        Map<String, Object> reply = new HashMap<>();
+        reply.put("styleJson", mapInstance.map.getStyleJson());
+        result.success(reply);
+      }
+      result.success(null);
+      break;
+    }
+
     case "moveBy": {
       long textureId = textureIdOfCall(call);
       if (maps.containsKey(textureId)) {

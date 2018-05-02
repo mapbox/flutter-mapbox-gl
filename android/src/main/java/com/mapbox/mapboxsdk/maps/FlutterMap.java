@@ -100,6 +100,14 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
     return nativeMapView.getStyleUrl();
   }
 
+  public void setStyleJson(String styleJson) {
+    nativeMapView.setStyleJson(styleJson);
+  }
+
+  public String getStyleJson(){
+    return nativeMapView.getStyleJson();
+  }
+
   public void moveBy(double dx, double dy, long duration) {
     nativeMapView.moveBy(dx, dy, duration);
   }

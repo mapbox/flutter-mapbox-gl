@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mapbox/controller.dart';
 import 'package:flutter_mapbox/overlay.dart';
@@ -87,6 +90,18 @@ class _StyleDemoState extends State<StyleDemo> {
                 Navigator.of(context).pop();
               },
             ),
+            new ListTile(
+              title: new Text('Load local style json'),
+              onTap: () async {
+                controller.flyTo(
+                    new CameraPosition(
+                        target: new LatLng(lat: 0.0, lng: 0.0), zoom: 0.0),
+                    5000);
+                String styleJson = await loadAsset();
+                controller.setStyleJson(styleJson);
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         ),
       ),
@@ -104,5 +119,9 @@ class _StyleDemoState extends State<StyleDemo> {
         ),
       ),
     );
+  }
+
+  Future<String> loadAsset() async {
+    return await rootBundle.loadString('assets/local_style.json');
   }
 }
