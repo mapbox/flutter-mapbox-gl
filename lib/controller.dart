@@ -110,15 +110,14 @@ class MapboxOverlayController {
   }
 
   Future<Null> easeTo(
-      CameraPosition camera, int duration, bool easingInterpolator) async {
+      CameraPosition camera, int duration) async {
     try {
       await _channel.invokeMethod(
-        'flyTo',
+        'easeTo',
         <String, Object>{
           'textureId': _textureId,
           'camera': camera.toMap(),
           'duration': duration,
-          'easingInterpolator': easingInterpolator
         },
       );
     } on PlatformException catch (e) {
