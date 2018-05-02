@@ -92,6 +92,14 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
     mapRenderer.onDestroy();
   }
 
+  public void setStyleUrl(String styleUrl){
+    nativeMapView.setStyleUrl(styleUrl);
+  }
+
+  public String getStyleUrl(){
+    return nativeMapView.getStyleUrl();
+  }
+
   public void moveBy(double dx, double dy, long duration) {
     nativeMapView.moveBy(dx, dy, duration);
   }

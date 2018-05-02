@@ -133,6 +133,29 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
       break;
     }
 
+    case "setStyleUrl": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        String styleUrl = stringParamOfCall(call, "styleUrl");
+        MapInstance mapHolder = maps.get(textureId);
+        mapHolder.map.setStyleUrl(styleUrl);
+      }
+      result.success(null);
+      break;
+    }
+
+    case "getStyleUrl": {
+      long textureId = textureIdOfCall(call);
+      if (maps.containsKey(textureId)) {
+        MapInstance mapInstance = maps.get(textureId);
+        Map<String, Object> reply = new HashMap<>();
+        reply.put("styleUrl", mapInstance.map.getStyleUrl());
+        result.success(reply);
+      }
+      result.success(null);
+      break;
+    }
+
     case "moveBy": {
       long textureId = textureIdOfCall(call);
       if (maps.containsKey(textureId)) {
@@ -316,6 +339,10 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
   private long longParamOfCall(MethodCall call, String param) {
     return ((Number) call.argument(param)).longValue();
+  }
+
+  private String stringParamOfCall(MethodCall call, String param){
+    return (String) call.argument(param);
   }
 
   private long textureIdOfCall(MethodCall call) {

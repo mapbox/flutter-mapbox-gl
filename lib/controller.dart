@@ -93,6 +93,32 @@ class MapboxOverlayController {
     }
   }
 
+  Future<Null> setStyleUrl(String styleUrl) async {
+    try {
+      await _channel.invokeMethod(
+        'setStyleUrl',
+        <String, Object>{
+          'textureId': _textureId,
+          'styleUrl': styleUrl,
+        },
+      );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<String> getStyleUrl() async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getStyleUrl',
+        <String, Object>{'textureId': _textureId},
+      );
+      return reply['styleUrl'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<Null> moveBy(double dx, double dy, int duration) async {
     try {
       await _channel.invokeMethod(
@@ -186,6 +212,18 @@ class MapboxOverlayController {
     }
   }
 
+  Future<double> getZoom() async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getZoom',
+        <String, Object>{'textureId': _textureId},
+      );
+      return reply['zoom'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<double> getMinZoom() async {
     try {
       final Map<Object, Object> reply = await _channel.invokeMethod(
@@ -233,18 +271,6 @@ class MapboxOverlayController {
           'zoom': zoom,
         },
       );
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
-  }
-
-  Future<double> getZoom() async {
-    try {
-      final Map<Object, Object> reply = await _channel.invokeMethod(
-        'getZoom',
-        <String, Object>{'textureId': _textureId},
-      );
-      return reply['zoom'];
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
