@@ -150,13 +150,11 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     case "easeTo": {
       long textureId = textureIdOfCall(call);
       if (maps.containsKey(textureId)) {
-
         CameraPosition cameraPosition = parseCamera(call.argument("camera"));
         int duration = intParamOfCall(call, "duration");
-        boolean easingInterpolator = booleanParamOfCall(call, "easingInterpolator");
 
         MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.easeTo(cameraPosition, duration, easingInterpolator);
+        mapHolder.map.easeTo(cameraPosition, duration, true);
       }
       result.success(null);
       break;

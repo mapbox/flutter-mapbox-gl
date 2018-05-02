@@ -15,7 +15,7 @@ class _CameraDemoState extends State<CameraDemo> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Mapbox Flutter Demo'),
+        title: new Text('Mapbox Camera Demo'),
       ),
       drawer: new Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -26,46 +26,45 @@ class _CameraDemoState extends State<CameraDemo> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             new DrawerHeader(
-              child: new Text('Drawer Header'),
+              child: new Text('Animate camera'),
               decoration: new BoxDecoration(
                 color: Colors.blue,
               ),
             ),
             new ListTile(
-              title: new Text('jumpTo New York'),
+              title: new Text('jumpTo Kings Cross'),
               onTap: () {
                 controller.jumpTo(new CameraPosition(
-                    target: new LatLng(lat: 40.758896, lng: -73.985130),
-                    zoom: 11.0,
-                    bearing: 0.0,
-                    tilt: 0.0));
+                    target: new LatLng(lat: 51.530643, lng: -0.122998),
+                    zoom: 14.0,
+                    bearing: 60.0,
+                    tilt: 60.0));
                 Navigator.of(context).pop();
               },
             ),
             new ListTile(
-              title: new Text('flyTo Melbourne'),
+              title: new Text('flyTo Tower Bridge'),
               onTap: () {
                 controller.flyTo(
                     new CameraPosition(
-                        target: new LatLng(lat: -37.8155984, lng: 144.9640312),
-                        zoom: 11.0,
+                        target: new LatLng(lat: 51.505808, lng: -0.075147),
+                        zoom: 12.0,
                         bearing: 0.0,
-                        tilt: 0.0),
+                        tilt: 35.0),
                     3000);
                 Navigator.of(context).pop();
               },
             ),
             new ListTile(
-              title: new Text('easeTo Dubai'),
+              title: new Text('easeTo London Eye'),
               onTap: () {
                 controller.easeTo(
                     new CameraPosition(
-                        target: new LatLng(lat: 25.276987, lng: 55.296249),
+                        target: new LatLng(lat: 51.503428, lng: -0.119524),
                         zoom: 11.0,
                         bearing: 180.0,
                         tilt: 0.0),
-                    3000,
-                    true);
+                    3000);
                 Navigator.of(context).pop();
               },
             ),
@@ -78,9 +77,9 @@ class _CameraDemoState extends State<CameraDemo> {
           options: new MapboxMapOptions(
             style: Style.mapboxStreets,
             camera: new CameraPosition(
-                target: new LatLng(lat: -37.8155984, lng: 144.9640312),
+                target: new LatLng(lat: 51.503428, lng: -0.119524),
                 zoom: 11.0,
-                bearing: 0.0,
+                bearing: 180.0,
                 tilt: 0.0),
           ),
         ),
