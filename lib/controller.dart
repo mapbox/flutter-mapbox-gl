@@ -119,6 +119,32 @@ class MapboxOverlayController {
     }
   }
 
+  Future<Null> setStyleJson(String styleJson) async {
+    try {
+      await _channel.invokeMethod(
+        'setStyleJson',
+        <String, Object>{
+          'textureId': _textureId,
+          'styleJson': styleJson,
+        },
+      );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<String> getStyleJson() async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getStyleJson',
+        <String, Object>{'textureId': _textureId},
+      );
+      return reply['styleJson'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<Null> moveBy(double dx, double dy, int duration) async {
     try {
       await _channel.invokeMethod(
