@@ -7,10 +7,12 @@ import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Bundle;
-
-import java.util.Map;
-import java.util.HashMap;
-
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.constants.Style;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
+import com.mapbox.mapboxsdk.maps.FlutterMap;
+import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -18,10 +20,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.view.FlutterView;
 
-import com.mapbox.mapboxsdk.maps.*;
-import com.mapbox.mapboxsdk.camera.*;
-import com.mapbox.mapboxsdk.geometry.*;
-import com.mapbox.mapboxsdk.constants.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * FlutterMapboxPlugin
@@ -115,230 +115,303 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     switch (call.method) {
-    case "create": {
-      FlutterView.SurfaceTextureEntry surfaceTextureEntry = view.createSurfaceTexture();
-      final int width = ((Number) call.argument("width")).intValue();
-      final int height = ((Number) call.argument("height")).intValue();
-      final MapboxMapOptions options = parseOptions((Map<String, Object>) call.argument("options"));
-      SurfaceTexture surfaceTexture = surfaceTextureEntry.surfaceTexture();
-      surfaceTexture.setDefaultBufferSize(width, height);
-      FlutterMap mapView = new FlutterMap(activity, options, surfaceTexture, width, height);
-      mapView.onStart();
-      mapView.onResume();
+      case "create": {
+        FlutterView.SurfaceTextureEntry surfaceTextureEntry = view.createSurfaceTexture();
+        final int width = ((Number) call.argument("width")).intValue();
+        final int height = ((Number) call.argument("height")).intValue();
+        final MapboxMapOptions options = parseOptions((Map<String, Object>) call.argument("options"));
+        SurfaceTexture surfaceTexture = surfaceTextureEntry.surfaceTexture();
+        surfaceTexture.setDefaultBufferSize(width, height);
+        FlutterMap mapView = new FlutterMap(activity, options, surfaceTexture, width, height);
+        mapView.onStart();
+        mapView.onResume();
 
-      maps.put(surfaceTextureEntry.id(), new MapInstance(mapView, surfaceTextureEntry));
-      Map<String, Object> reply = new HashMap<>();
-      reply.put("textureId", surfaceTextureEntry.id());
-      result.success(reply);
-      break;
-    }
-
-    case "setStyleUrl": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        String styleUrl = stringParamOfCall(call, "styleUrl");
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.setStyleUrl(styleUrl);
-      }
-      result.success(null);
-      break;
-    }
-
-    case "getStyleUrl": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+        maps.put(surfaceTextureEntry.id(), new MapInstance(mapView, surfaceTextureEntry));
         Map<String, Object> reply = new HashMap<>();
-        reply.put("styleUrl", mapInstance.map.getStyleUrl());
+        reply.put("textureId", surfaceTextureEntry.id());
         result.success(reply);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "setStyleJson": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        String styleUrl = stringParamOfCall(call, "styleJson");
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.setStyleJson(styleUrl);
+      case "setStyleUrl": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          String styleUrl = stringParamOfCall(call, "styleUrl");
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.map.setStyleUrl(styleUrl);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "getStyleJson": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
-        Map<String, Object> reply = new HashMap<>();
-        reply.put("styleJson", mapInstance.map.getStyleJson());
-        result.success(reply);
+      case "getStyleUrl": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          reply.put("styleUrl", mapInstance.map.getStyleUrl());
+          result.success(reply);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "moveBy": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        double dx = doubleParamOfCall(call, "dx");
-        double dy = doubleParamOfCall(call, "dy");
-        long duration = longParamOfCall(call, "duration");
-
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.moveBy(dx, dy, duration);
+      case "setStyleJson": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          String styleUrl = stringParamOfCall(call, "styleJson");
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.map.setStyleJson(styleUrl);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "easeTo": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        CameraPosition cameraPosition = parseCamera(call.argument("camera"));
-        int duration = intParamOfCall(call, "duration");
-
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.easeTo(cameraPosition, duration, true);
+      case "getStyleJson": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          reply.put("styleJson", mapInstance.map.getStyleJson());
+          result.success(reply);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "flyTo": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-
-        CameraPosition cameraPosition = parseCamera(call.argument("camera"));
-        int duration = intParamOfCall(call, "duration");
-
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.flyTo(cameraPosition, duration);
+      case "moveBy": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          double dx = doubleParamOfCall(call, "dx");
+          double dy = doubleParamOfCall(call, "dy");
+          long duration = longParamOfCall(call, "duration");
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.map.moveBy(dx, dy, duration);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "jumpTo": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
+      case "easeTo": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          CameraPosition cameraPosition = parseCamera(call.argument("camera"));
+          int duration = intParamOfCall(call, "duration");
 
-        CameraPosition cameraPosition = parseCamera(call.argument("camera"));
-
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.map.jumpTo(cameraPosition);
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.map.easeTo(cameraPosition, duration, true);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "zoom": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+      case "flyTo": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
 
-        double zoom = doubleParamOfCall(call, "zoom");
-        float x = floatParamOfCall(call, "x");
-        float y = floatParamOfCall(call, "y");
-        long duration = longParamOfCall(call, "duration");
+          CameraPosition cameraPosition = parseCamera(call.argument("camera"));
+          int duration = intParamOfCall(call, "duration");
 
-        mapInstance.map.zoom(zoom, new PointF(x, y), duration);
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.map.flyTo(cameraPosition, duration);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "zoomBy": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+      case "jumpTo": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
 
-        double zoomBy = doubleParamOfCall(call, "zoomBy");
-        float x = floatParamOfCall(call, "x");
-        float y = floatParamOfCall(call, "y");
-        long duration = longParamOfCall(call, "duration");
+          CameraPosition cameraPosition = parseCamera(call.argument("camera"));
 
-        mapInstance.map.zoom(mapInstance.map.getZoom() + zoomBy, new PointF(x, y), duration);
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.map.jumpTo(cameraPosition);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "getMinZoom": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+      case "zoom": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
 
-        Map<String, Object> reply = new HashMap<>();
-        reply.put("zoom", mapInstance.map.getMinZoom());
-        result.success(reply);
+          double zoom = doubleParamOfCall(call, "zoom");
+          float x = floatParamOfCall(call, "x");
+          float y = floatParamOfCall(call, "y");
+          long duration = longParamOfCall(call, "duration");
+
+          mapInstance.map.zoom(zoom, new PointF(x, y), duration);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "setMinZoom": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+      case "zoomBy": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
 
-        double zoom = doubleParamOfCall(call, "zoom");
-        mapInstance.map.setMinZoom(zoom);
+          double zoomBy = doubleParamOfCall(call, "zoomBy");
+          float x = floatParamOfCall(call, "x");
+          float y = floatParamOfCall(call, "y");
+          long duration = longParamOfCall(call, "duration");
+
+          mapInstance.map.zoom(mapInstance.map.getZoom() + zoomBy, new PointF(x, y), duration);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "getMaxZoom": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+      case "getMinZoom": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
 
-        Map<String, Object> reply = new HashMap<>();
-        reply.put("zoom", mapInstance.map.getMaxZoom());
-        result.success(reply);
+          Map<String, Object> reply = new HashMap<>();
+          reply.put("zoom", mapInstance.map.getMinZoom());
+          result.success(reply);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "setMaxZoom": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
+      case "setMinZoom": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
 
-        double zoom = doubleParamOfCall(call, "zoom");
-        mapInstance.map.setMaxZoom(zoom);
+          double zoom = doubleParamOfCall(call, "zoom");
+          mapInstance.map.setMinZoom(zoom);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
 
-    case "getZoom": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapInstance = maps.get(textureId);
-        Map<String, Object> reply = new HashMap<>();
-        reply.put("zoom", mapInstance.map.getZoom());
-        result.success(reply);
-      }
-      result.success(null);
-      break;
-    }
+      case "getMaxZoom": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
 
-    case "dispose": {
-      long textureId = textureIdOfCall(call);
-      if (maps.containsKey(textureId)) {
-        MapInstance mapHolder = maps.get(textureId);
-        mapHolder.release();
-        maps.remove(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          reply.put("zoom", mapInstance.map.getMaxZoom());
+          result.success(reply);
+        }
+        result.success(null);
+        break;
       }
-      result.success(null);
-      break;
-    }
-    default:
-      result.notImplemented();
+
+      case "setMaxZoom": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+
+          double zoom = doubleParamOfCall(call, "zoom");
+          mapInstance.map.setMaxZoom(zoom);
+        }
+        result.success(null);
+        break;
+      }
+
+      case "getZoom": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          reply.put("zoom", mapInstance.map.getZoom());
+          result.success(reply);
+        }
+        result.success(null);
+        break;
+      }
+
+      case "getLatLngForPixel": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          LatLng latLng = mapInstance.map.getLatLng(screenPointParamOfCall(call));
+          reply.put("lat", latLng.getLatitude());
+          reply.put("lng", latLng.getLongitude());
+          result.success(reply);
+        } else {
+          result.success(null);
+        }
+        break;
+      }
+
+      case "getPixelForLatLng": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          PointF pointF = mapInstance.map.getScreenPoint(latLngParamOfCall(call));
+          reply.put("dx", pointF.x);
+          reply.put("dy", pointF.y);
+          result.success(reply);
+        } else {
+          result.success(null);
+        }
+        break;
+      }
+
+      case "getProjectedMetersForLatLng": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          ProjectedMeters projectedMeters = mapInstance.map.getProjecteMeters(latLngParamOfCall(call));
+          reply.put("northing", projectedMeters.getNorthing());
+          reply.put("easting", projectedMeters.getEasting());
+          result.success(reply);
+        } else {
+          result.success(null);
+        }
+        break;
+      }
+
+      case "getLatLngForProjectedMeters": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          LatLng latLng = mapInstance.map.getLatLng(projectedMetersPointParamOfCall(call));
+          reply.put("lat", latLng.getLatitude());
+          reply.put("lng", latLng.getLongitude());
+          result.success(reply);
+        } else {
+          result.success(null);
+        }
+        break;
+      }
+
+      case "getMetersPerPixelAtLatitude": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapInstance = maps.get(textureId);
+          Map<String, Object> reply = new HashMap<>();
+          double latitude = doubleParamOfCall(call, "lat");
+          reply.put("meters", mapInstance.map.getMetersPerPixelAtLatitude(latitude));
+          result.success(reply);
+        } else {
+          result.success(null);
+        }
+        break;
+      }
+
+      case "dispose": {
+        long textureId = textureIdOfCall(call);
+        if (maps.containsKey(textureId)) {
+          MapInstance mapHolder = maps.get(textureId);
+          mapHolder.release();
+          maps.remove(textureId);
+        }
+        result.success(null);
+        break;
+      }
+      default:
+        result.notImplemented();
     }
   }
 
@@ -362,7 +435,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     return ((Number) call.argument(param)).longValue();
   }
 
-  private String stringParamOfCall(MethodCall call, String param){
+  private String stringParamOfCall(MethodCall call, String param) {
     return (String) call.argument(param);
   }
 
@@ -370,11 +443,30 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     return ((Number) call.argument("textureId")).longValue();
   }
 
+  private LatLng latLngParamOfCall(MethodCall call) {
+    Double lat = call.argument("lat");
+    Double lng = call.argument("lng");
+    return new LatLng(lat, lng);
+  }
+
+  private PointF screenPointParamOfCall(MethodCall call) {
+    Double x = call.argument("x");
+    Double y = call.argument("y");
+    return new PointF(x.floatValue(), y.floatValue());
+  }
+
+  private ProjectedMeters projectedMetersPointParamOfCall(MethodCall call) {
+    double easting = call.argument("easting");
+    double northing = call.argument("northing");
+    return new ProjectedMeters(northing, easting);
+  }
+
   private MapboxMapOptions parseOptions(Map<String, Object> options) {
 
     String style = (String) options.get("style");
-    if (style == null)
+    if (style == null) {
       style = Style.MAPBOX_STREETS;
+    }
     MapboxMapOptions mapOptions = new MapboxMapOptions().styleUrl(style);
 
     Map<String, Object> camera = (Map<String, Object>) options.get("camera");
@@ -388,20 +480,24 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     CameraPosition.Builder cameraPosition = new CameraPosition.Builder();
 
     LatLng target = parseLatLng((Map<String, Object>) camera.get("target"));
-    if (target != null)
+    if (target != null) {
       cameraPosition.target(target);
+    }
 
     Double zoom = (Double) camera.get("zoom");
-    if (zoom != null)
+    if (zoom != null) {
       cameraPosition.zoom(zoom);
+    }
 
     Double bearing = (Double) camera.get("bearing");
-    if (bearing != null)
+    if (bearing != null) {
       cameraPosition.bearing(bearing);
+    }
 
     Double tilt = (Double) camera.get("tilt");
-    if (tilt != null)
+    if (tilt != null) {
       cameraPosition.tilt(tilt);
+    }
 
     return cameraPosition.build();
   }

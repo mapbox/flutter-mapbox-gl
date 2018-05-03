@@ -7,6 +7,7 @@ import 'package:flutter_mapbox_example/flutter_tabbar.dart';
 import 'package:flutter_mapbox_example/mapbox_camera.dart';
 import 'package:flutter_mapbox_example/mapbox_minmaxzoomlevel.dart';
 import 'package:flutter_mapbox_example/mapbox_style.dart';
+import 'package:flutter_mapbox_example/mapbox_projection.dart';
 
 Future<Null> main() async {
   runApp(new MyApp());
@@ -46,6 +47,7 @@ final List<Entry> data = <Entry>[
       new ScreenEntry('Camera Animations', new CameraDemo()),
       new ScreenEntry('Min/Max Zoom Levels', new MinMaxZoomLevelDemo()),
       new ScreenEntry('Style API', new StyleDemo()),
+      new ScreenEntry('Projection', new ProjectionDemo())
     ],
   ),
   new ExpansionEntry(
