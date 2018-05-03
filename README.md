@@ -23,7 +23,7 @@ This demo app uses Mapbox vector tiles, which require a Mapbox account and a Map
 
 ## Documentation
 
-This README file currently houses all of the documentation for this Flutter project. Please visit [mapbox.com/android-docs](https://www.mapbox.com/android-docs/) if you'd like more information about the Mapbox Maps SDK for Android.
+This README file currently houses all of the documentation for this Flutter project. Please visit [mapbox.com/android-docs](https://www.mapbox.com/android-docs/) if you'd like more information about the Mapbox Maps SDK for Android and [mapbox.com/ios-sdk](https://www.mapbox.com/ios-sdk/) for more information about the Mapbox Maps SDK for iOS.
 
 ## Getting Help
 
@@ -31,12 +31,9 @@ This README file currently houses all of the documentation for this Flutter proj
 - **Have a bug to report?** [Open an issue](https://github.com/mapbox/flutter-mapbox-gl/issues/new). If possible, include a full log and information which shows the issue.
 - **Have a feature request?** [Open an issue](https://github.com/mapbox/flutter-mapbox-gl/issues/new). Tell us what the feature should do and why you want the feature.
 
-
 ## Sample code
 
-This repository's own code and demo app is code for you to reference.
-
-It doesn't currently use Flutter, but you could download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with the Mapbox Maps SDK for Android. Perhaps you'll find use cases in it which you'd like to see in this Flutter project.
+[This repository's example library](https://github.com/mapbox/flutter-mapbox-gl/tree/master/example/lib) is currently the best place for you to find reference code for this project.
 
 ## Contributing
 
