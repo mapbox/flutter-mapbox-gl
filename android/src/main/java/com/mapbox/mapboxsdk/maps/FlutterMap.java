@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
 
+import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.maps.renderer.surfacetexture.SurfaceTextureMapRenderer;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
@@ -13,32 +14,30 @@ import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChangedListener {
-  private Context context;
-  private MapboxMapOptions mapboxMapOptions;
-  private NativeMapView nativeMapView;
-  private MapRenderer mapRenderer;
+  private final Context context;
+  private final NativeMapView nativeMapView;
+  private final MapRenderer mapRenderer;
   private int width;
   private int height;
 
   public FlutterMap(Context context, MapboxMapOptions options, SurfaceTexture surfaceTexture, int width, int height) {
     this.context = context;
-    this.mapboxMapOptions = options;
     this.width = width;
     this.height = height;
 
-    String localFontFamily = mapboxMapOptions.getLocalIdeographFontFamily();
-    boolean translucentSurface = mapboxMapOptions.getTranslucentTextureSurface();
+    String localFontFamily = options.getLocalIdeographFontFamily();
+    boolean translucentSurface = options.getTranslucentTextureSurface();
     mapRenderer = new SurfaceTextureMapRenderer(context, surfaceTexture, width, height, localFontFamily,
         translucentSurface);
 
     nativeMapView = new NativeMapView(context, this, mapRenderer);
     nativeMapView.addOnMapChangedListener(this);
-    nativeMapView.setStyleUrl(mapboxMapOptions.getStyle());
+    nativeMapView.setStyleUrl(options.getStyle());
     nativeMapView.resizeView(width, height);
     nativeMapView.setReachability(ConnectivityReceiver.instance(context).isConnected(context));
     nativeMapView.update();
 
-    CameraPosition cameraPosition = mapboxMapOptions.getCamera();
+    CameraPosition cameraPosition = options.getCamera();
     if (cameraPosition != null) {
       nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target, cameraPosition.tilt, cameraPosition.zoom);
     }
@@ -124,6 +123,26 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
 
   public void jumpTo(CameraPosition cameraPosition) {
     nativeMapView.jumpTo(cameraPosition.bearing, cameraPosition.target, cameraPosition.tilt, cameraPosition.zoom);
+  }
+
+  public double getMetersPerPixelAtLatitude(double latitude){
+    return nativeMapView.getMetersPerPixelAtLatitude(latitude);
+  }
+
+  public ProjectedMeters getProjecteMeters(LatLng latLng){
+    return nativeMapView.projectedMetersForLatLng(latLng);
+  }
+
+  public LatLng getLatLng(ProjectedMeters projectedMeters){
+    return nativeMapView.latLngForProjectedMeters(projectedMeters);
+  }
+
+  public LatLng getLatLng(PointF screenPoint){
+    return nativeMapView.latLngForPixel(screenPoint);
+  }
+
+  public PointF getScreenPoint(LatLng latLng){
+    return nativeMapView.pixelForLatLng(latLng);
   }
 
   public double getMinZoom() {

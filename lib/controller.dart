@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
@@ -25,6 +26,29 @@ class LatLng {
   Map<String, Object> toMap() {
     return {"lat": lat, "lng": lng};
   }
+
+  @override
+  String toString() {
+    return 'LatLng{lat: $lat, lng: $lng}';
+  }
+
+}
+
+class ProjectedMeters {
+  final double northing;
+  final double easting;
+
+  ProjectedMeters(this.northing, this.easting);
+
+  Map<String, Object> toMap() {
+    return {"northing": northing, "easing": easting};
+  }
+
+  @override
+  String toString() {
+    return 'ProjectedMeters{northing: $northing, easting: $easting}';
+  }
+
 }
 
 class CameraPosition {
@@ -144,6 +168,10 @@ class MapboxOverlayController {
       return new Future.error(e);
     }
   }
+
+  //
+  // Camera API
+  //
 
   Future<Null> moveBy(double dx, double dy, int duration) async {
     try {
@@ -296,6 +324,97 @@ class MapboxOverlayController {
           'zoom': zoom,
         },
       );
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  //
+  // Projection API
+  //
+
+  Future<LatLng> getLatLngForOffset(Offset offset) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getLatLngForPixel',
+        <String, Object>{
+          'textureId': _textureId,
+          'x': offset.dx,
+          'y': offset.dy,
+        },
+      );
+      double lat = reply['lat'];
+      double lng = reply['lng'];
+      return new LatLng(lat:lat, lng: lng);
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<Offset> getOffsetForLatLng(LatLng latLng) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getPixelForLatLng',
+        <String, Object>{
+          'textureId': _textureId,
+          'lat': latLng.lat,
+          'lng': latLng.lng,
+        },
+      );
+      double dx = reply['dx'];
+      double dy = reply['dy'];
+      return new Offset(dx, dy);
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<ProjectedMeters> getProjectedMetersForLatLng(LatLng latLng) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getProjectedMetersForLatLng',
+        <String, Object>{
+          'textureId': _textureId,
+          'lat': latLng.lat,
+          'lng': latLng.lng,
+        },
+      );
+      double northing = reply['northing'];
+      double easting = reply['easting'];
+      return new ProjectedMeters(northing, easting);
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<LatLng> getLatLngForProjectedMeters(ProjectedMeters meters) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getLatLngForProjectedMeters',
+        <String, Object>{
+          'textureId': _textureId,
+          'northing' : meters.northing,
+          'easting' : meters.easting,
+        },
+      );
+      double latitude = reply['lat'];
+      double longitude =  reply['lng'];
+      return new LatLng(lat: latitude,lng: longitude);
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<double> getMetersPerPixelAtLatitude(double latitude) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'getMetersPerPixelAtLatitude',
+        <String, Object>{
+          'textureId': _textureId,
+          'lat': latitude,
+        },
+      );
+      return reply["meters"];
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
