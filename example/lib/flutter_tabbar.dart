@@ -21,7 +21,7 @@ class TabBarDemo extends StatelessWidget {
                 new Tab(icon: new Icon(Icons.directions_bike)),
               ],
             ),
-            title: new Text('Tabs Demo'),
+            title: new Text('Flutter Tabs Demo'),
           ),
           body: new TabBarView(
             children: [

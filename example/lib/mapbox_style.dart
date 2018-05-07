@@ -18,7 +18,7 @@ class _StyleDemoState extends State<StyleDemo> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Style Demo'),
+        title: new Text('Mapbox Style Demo'),
       ),
       drawer: new Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll

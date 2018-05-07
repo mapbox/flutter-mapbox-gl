@@ -15,7 +15,7 @@ class _MinMaxZoomLevelDemoState extends State<MinMaxZoomLevelDemo> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Mapbox Flutter Demo'),
+        title: new Text('Mapbox Min/Max Zoom Level Demo'),
       ),
       drawer: new Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
