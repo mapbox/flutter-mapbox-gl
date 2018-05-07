@@ -1,4 +1,4 @@
-name: flutter_mapbox_example
+name: mapbox_gl_example
 description: Demonstrates how to use the flutter_mapbox plugin.
 
 dependencies:
@@ -13,7 +13,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_mapbox:
+  mapbox_gl:
     path: ../
 
 # For information on the generic Dart part of this file, see the

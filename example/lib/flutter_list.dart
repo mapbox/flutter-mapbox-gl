@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mapbox/controller.dart';
-import 'package:flutter_mapbox/overlay.dart';
+import 'package:mapbox_gl/controller.dart';
+import 'package:mapbox_gl/overlay.dart';
 
 class ListDemo extends StatefulWidget {
   @override

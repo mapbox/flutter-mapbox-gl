@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mapbox/controller.dart';
-import 'package:flutter_mapbox/overlay.dart';
+import 'package:mapbox_gl/controller.dart';
+import 'package:mapbox_gl/overlay.dart';
 
 class StyleDemo extends StatefulWidget {
   @override

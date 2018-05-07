@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * FlutterMapboxPlugin
  */
-public class FlutterMapboxPlugin implements MethodCallHandler {
+public class MapboxPlugin implements MethodCallHandler {
 
   private final FlutterView view;
   private Activity activity;
@@ -35,7 +35,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
   private static Map<Long, MapInstance> maps = new HashMap<>();
 
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-  private FlutterMapboxPlugin(Registrar registrar, FlutterView view, Activity activity) {
+  private MapboxPlugin(Registrar registrar, FlutterView view, Activity activity) {
     this.registrar = registrar;
     this.view = view;
     this.activity = activity;
@@ -43,7 +43,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
     activity.getApplication().registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
       @Override
       public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           for (MapInstance mapInstance : maps.values()) {
             //                    mapInstance.map.onCreate(savedInstanceState);
           }
@@ -52,7 +52,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
       @Override
       public void onActivityStarted(Activity activity) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           for (MapInstance mapInstance : maps.values()) {
             mapInstance.map.onStart();
           }
@@ -61,7 +61,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
       @Override
       public void onActivityResumed(Activity activity) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           for (MapInstance mapInstance : maps.values()) {
             mapInstance.map.onResume();
           }
@@ -70,7 +70,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
       @Override
       public void onActivityPaused(Activity activity) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           for (MapInstance mapInstance : maps.values()) {
             mapInstance.map.onPause();
           }
@@ -79,7 +79,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
       @Override
       public void onActivityStopped(Activity activity) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           for (MapInstance mapInstance : maps.values()) {
             mapInstance.map.onStop();
           }
@@ -88,7 +88,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
       @Override
       public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           for (MapInstance mapInstance : maps.values()) {
             //                    mapInstance.map.onSaveInstanceState(outState);
           }
@@ -97,7 +97,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
       @Override
       public void onActivityDestroyed(Activity activity) {
-        if (activity == FlutterMapboxPlugin.this.activity) {
+        if (activity == MapboxPlugin.this.activity) {
           //                  for (MapInstance mapInstance : maps.values()) {
           //                    mapInstance.release();
           //                  }
@@ -108,7 +108,7 @@ public class FlutterMapboxPlugin implements MethodCallHandler {
 
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "com.mapbox/flutter_mapbox");
-    channel.setMethodCallHandler(new FlutterMapboxPlugin(registrar, registrar.view(), registrar.activity()));
+    channel.setMethodCallHandler(new MapboxPlugin(registrar, registrar.view(), registrar.activity()));
   }
 
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)

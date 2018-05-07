@@ -1,4 +1,4 @@
-name: flutter_mapbox
+name: mapbox_gl
 description: A Flutter plugin for integrating mapbox-gl-native inside a Flutter widget in iOS and Android applications.
 version: 0.0.1
 author: Mapbox <tobrun@mapbox.com>
@@ -15,7 +15,7 @@ dependencies:
 flutter:
   plugin:
     androidPackage: com.mapbox.flutter
-    pluginClass: FlutterMapboxPlugin
+    pluginClass: MapboxPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
