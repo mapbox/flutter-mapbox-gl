@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mapbox_example/flutter_animation.dart';
-import 'package:flutter_mapbox_example/flutter_list.dart';
-import 'package:flutter_mapbox_example/flutter_tabbar.dart';
-import 'package:flutter_mapbox_example/mapbox_camera.dart';
-import 'package:flutter_mapbox_example/mapbox_minmaxzoomlevel.dart';
-import 'package:flutter_mapbox_example/mapbox_style.dart';
-import 'package:flutter_mapbox_example/mapbox_projection.dart';
+import 'flutter_animation.dart';
+import 'flutter_list.dart';
+import 'flutter_tabbar.dart';
+import 'mapbox_camera.dart';
+import 'mapbox_minmaxzoomlevel.dart';
+import 'mapbox_style.dart';
+import 'mapbox_projection.dart';
 
 Future<Null> main() async {
   runApp(new MyApp());
