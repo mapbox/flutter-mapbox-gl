@@ -67,7 +67,7 @@ class _ListDemoState extends State<ListDemo> {
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          title: const Text('List demo'),
+          title: const Text('Flutter List Demo'),
         ),
         body: new Padding(
           padding: const EdgeInsets.all(16.0),
