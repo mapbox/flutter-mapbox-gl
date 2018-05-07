@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_mapbox/controller.dart';
+import 'package:mapbox_gl/controller.dart';
 
 class MapboxOverlay extends StatefulWidget {
   MapboxOverlay({Key key, this.controller, this.options}) : super(key: key);
