@@ -1,0 +1,28 @@
+version: 2
+
+workflows:
+  version: 2
+  default:
+    jobs:
+      - android
+jobs:
+  android:
+    docker:
+      - image: mbgl/70d14492bc:android-ndk-r17
+    resource_class: large
+    working_directory: /src
+    environment:
+      LIBSYSCONFCPUS: 4
+      JOBS: 4
+      BUILDTYPE: Debug
+      IS_LOCAL_DEVELOPMENT: false
+    steps:
+      - checkout
+      - run:
+          name: Flutter test
+          command: flutter doctor
+      - run:
+          name: Flutter run
+          command: cd example && flutter -v build apk
+      - store_artifacts:
+          path: build/app/outputs/apk/release/app-release.apk
