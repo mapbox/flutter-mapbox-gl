@@ -151,8 +151,9 @@ public class MapboxPlugin implements MethodCallHandler {
           Map<String, Object> reply = new HashMap<>();
           reply.put("styleUrl", mapInstance.map.getStyleUrl());
           result.success(reply);
+        } else {
+          result.success(null);
         }
-        result.success(null);
         break;
       }
 
@@ -174,8 +175,9 @@ public class MapboxPlugin implements MethodCallHandler {
           Map<String, Object> reply = new HashMap<>();
           reply.put("styleJson", mapInstance.map.getStyleJson());
           result.success(reply);
+        } else {
+          result.success(null);
         }
-        result.success(null);
         break;
       }
 
@@ -197,7 +199,6 @@ public class MapboxPlugin implements MethodCallHandler {
         if (maps.containsKey(textureId)) {
           CameraPosition cameraPosition = parseCamera(call.argument("camera"));
           int duration = intParamOfCall(call, "duration");
-
           MapInstance mapHolder = maps.get(textureId);
           mapHolder.map.easeTo(cameraPosition, duration, true);
         }
@@ -208,10 +209,8 @@ public class MapboxPlugin implements MethodCallHandler {
       case "flyTo": {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
-
           CameraPosition cameraPosition = parseCamera(call.argument("camera"));
           int duration = intParamOfCall(call, "duration");
-
           MapInstance mapHolder = maps.get(textureId);
           mapHolder.map.flyTo(cameraPosition, duration);
         }
@@ -222,9 +221,7 @@ public class MapboxPlugin implements MethodCallHandler {
       case "jumpTo": {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
-
           CameraPosition cameraPosition = parseCamera(call.argument("camera"));
-
           MapInstance mapHolder = maps.get(textureId);
           mapHolder.map.jumpTo(cameraPosition);
         }
@@ -236,12 +233,10 @@ public class MapboxPlugin implements MethodCallHandler {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
           MapInstance mapInstance = maps.get(textureId);
-
           double zoom = doubleParamOfCall(call, "zoom");
           float x = floatParamOfCall(call, "x");
           float y = floatParamOfCall(call, "y");
           long duration = longParamOfCall(call, "duration");
-
           mapInstance.map.zoom(zoom, new PointF(x, y), duration);
         }
         result.success(null);
@@ -252,12 +247,10 @@ public class MapboxPlugin implements MethodCallHandler {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
           MapInstance mapInstance = maps.get(textureId);
-
           double zoomBy = doubleParamOfCall(call, "zoomBy");
           float x = floatParamOfCall(call, "x");
           float y = floatParamOfCall(call, "y");
           long duration = longParamOfCall(call, "duration");
-
           mapInstance.map.zoom(mapInstance.map.getZoom() + zoomBy, new PointF(x, y), duration);
         }
         result.success(null);
@@ -268,12 +261,12 @@ public class MapboxPlugin implements MethodCallHandler {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
           MapInstance mapInstance = maps.get(textureId);
-
           Map<String, Object> reply = new HashMap<>();
           reply.put("zoom", mapInstance.map.getMinZoom());
           result.success(reply);
+        } else {
+          result.success(null);
         }
-        result.success(null);
         break;
       }
 
@@ -281,7 +274,6 @@ public class MapboxPlugin implements MethodCallHandler {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
           MapInstance mapInstance = maps.get(textureId);
-
           double zoom = doubleParamOfCall(call, "zoom");
           mapInstance.map.setMinZoom(zoom);
         }
@@ -293,12 +285,12 @@ public class MapboxPlugin implements MethodCallHandler {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
           MapInstance mapInstance = maps.get(textureId);
-
           Map<String, Object> reply = new HashMap<>();
           reply.put("zoom", mapInstance.map.getMaxZoom());
           result.success(reply);
+        } else {
+          result.success(null);
         }
-        result.success(null);
         break;
       }
 
@@ -306,7 +298,6 @@ public class MapboxPlugin implements MethodCallHandler {
         long textureId = textureIdOfCall(call);
         if (maps.containsKey(textureId)) {
           MapInstance mapInstance = maps.get(textureId);
-
           double zoom = doubleParamOfCall(call, "zoom");
           mapInstance.map.setMaxZoom(zoom);
         }
@@ -321,8 +312,9 @@ public class MapboxPlugin implements MethodCallHandler {
           Map<String, Object> reply = new HashMap<>();
           reply.put("zoom", mapInstance.map.getZoom());
           result.success(reply);
+        } else {
+          result.success(null);
         }
-        result.success(null);
         break;
       }
 
@@ -406,8 +398,9 @@ public class MapboxPlugin implements MethodCallHandler {
           MapInstance mapHolder = maps.get(textureId);
           mapHolder.release();
           maps.remove(textureId);
+        } else {
+          result.success(null);
         }
-        result.success(null);
         break;
       }
       default:
