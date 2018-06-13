@@ -127,7 +127,6 @@ public class MapboxPlugin implements MethodCallHandler {
       }
 
       case "create": {
-
         FlutterView.SurfaceTextureEntry surfaceTextureEntry = view.createSurfaceTexture();
         final int width = ((Number) call.argument("width")).intValue();
         final int height = ((Number) call.argument("height")).intValue();
@@ -142,7 +141,6 @@ public class MapboxPlugin implements MethodCallHandler {
         Map<String, Object> reply = new HashMap<>();
         reply.put("textureId", surfaceTextureEntry.id());
         result.success(reply);
-
         break;
       }
 

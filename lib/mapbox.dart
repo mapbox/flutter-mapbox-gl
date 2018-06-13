@@ -7,7 +7,6 @@ const MethodChannel _channel = const MethodChannel('com.mapbox/flutter_mapbox');
 
 class Mapbox {
 
-
   Future<Null> setAccessToken(String accessToken) async {
     try {
       await _channel.invokeMethod(
