@@ -9,12 +9,16 @@ embedded interactive and customizable vector maps inside of a Flutter widget. Th
 
 ## Getting Started
 
+Following examples use Mapbox vector tiles, which require a Mapbox account and a Mapbox access token. Obtain a free access token on [your Mapbox account page](https://www.mapbox.com/account/access-tokens/). After you get the key, initialize in your dart app:
+
+```
+import 'package:mapbox_gl/mapbox.dart';
+
+new Mapbox().setAccessToken("YOUR TOKEN HERE");
+```
+
 ### Android
 
-Following examples use Mapbox vector tiles, which require a Mapbox account and a Mapbox access token. Obtain a free access token on [your Mapbox account page](https://www.mapbox.com/account/access-tokens/). After you get the key, place it in project's Android directory:
-- Create a `local.properties` file with the following path: `$project_dir/android/local.properties`
-- Add `mapbox.accessToken="YOUR MAPBOX ACCESS TOKEN"`
- token to the **local.properties** file.
  
 #### Demo app
 
@@ -26,31 +30,18 @@ Following examples use Mapbox vector tiles, which require a Mapbox account and a
 
 - Create new Flutter project in your IDE or via terminal
 - Add `mapbox_gl: ^0.0.1` dependency to `pubspec.yaml` file and [get the package](https://flutter.io/using-packages/#adding-a-package-dependency-to-an-app)
-- Add Mapbox dependency and read token value in Android module `build.gradle` file:
-```
-android {
-    defaultConfig {
-        // ...
-        def mapboxAccessToken = localProperties.getProperty('mapbox.accessToken')
-        buildConfigField "String", "MAPBOX_ACCESS_TOKEN", "$mapboxAccessToken"
-    }
-}
 
+```
 dependencies {
     // ...
     implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:6.1.0-SNAPSHOT"
 }
 ```
-- Initialize Mapbox in Android `MainActivity` class:
-```
-override fun onCreate(savedInstanceState: Bundle?) {
-  // ...
-  Mapbox.getInstance(this, BuildConfig.MAPBOX_ACCESS_TOKEN)
-}
-```
+
 - Import Mapbox widgets and add them to your widget tree
 ```
 import 'package:mapbox_gl/controller.dart';
+import 'package:mapbox_gl/mapbox.dart';
 import 'package:mapbox_gl/flutter_mapbox.dart';
 import 'package:mapbox_gl/overlay.dart';
 ```

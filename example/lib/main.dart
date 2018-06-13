@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mapbox_gl/mapbox.dart';
+
 import 'flutter_animation.dart';
 import 'flutter_list.dart';
 import 'flutter_tabbar.dart';
@@ -10,6 +12,8 @@ import 'mapbox_style.dart';
 import 'mapbox_projection.dart';
 
 Future<Null> main() async {
+  //must set mapbox access token
+  new Mapbox().setAccessToken("YOUR TOKEN HERE");
   runApp(new MyApp());
 }
 

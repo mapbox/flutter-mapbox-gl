@@ -7,21 +7,24 @@ import android.graphics.PointF;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Bundle;
+
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
 import com.mapbox.mapboxsdk.maps.FlutterMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.view.FlutterView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * FlutterMapboxPlugin
@@ -115,7 +118,16 @@ public class MapboxPlugin implements MethodCallHandler {
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     switch (call.method) {
+
+      case "setAccessToken": {
+        final String accessToken = call.argument("accessToken").toString();
+        Mapbox.getInstance(activity, accessToken);
+        result.success(null);
+        break;
+      }
+
       case "create": {
+
         FlutterView.SurfaceTextureEntry surfaceTextureEntry = view.createSurfaceTexture();
         final int width = ((Number) call.argument("width")).intValue();
         final int height = ((Number) call.argument("height")).intValue();
@@ -130,6 +142,7 @@ public class MapboxPlugin implements MethodCallHandler {
         Map<String, Object> reply = new HashMap<>();
         reply.put("textureId", surfaceTextureEntry.id());
         result.success(reply);
+
         break;
       }
 
