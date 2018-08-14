@@ -41,7 +41,7 @@ class ProjectedMeters {
   ProjectedMeters(this.northing, this.easting);
 
   Map<String, Object> toMap() {
-    return {"northing": northing, "easing": easting};
+    return {"northing": northing, "easting": easting};
   }
 
   @override
