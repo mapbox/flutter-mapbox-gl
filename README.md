@@ -42,6 +42,13 @@ dependencies {
 }
 ```
 - Initialize Mapbox in Android `MainActivity` class:
+import com.mapbox.mapboxsdk.*;
+import com.mapbox.mapboxsdk.maps.*;
+import com.mapbox.mapboxsdk.maps.*;
+import com.mapbox.mapboxsdk.camera.*;
+import com.mapbox.mapboxsdk.geometry.*;
+import com.mapbox.mapboxsdk.constants.*;
+import com.mapbox.mapboxsdk.annotations.*;
 ```
 override fun onCreate(savedInstanceState: Bundle?) {
   // ...
