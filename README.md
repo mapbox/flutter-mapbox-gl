@@ -43,6 +43,10 @@ dependencies {
 ```
 - Initialize Mapbox in Android `MainActivity` class:
 ```
+import com.mapbox.mapboxsdk.*;
+```
+
+```
 override fun onCreate(savedInstanceState: Bundle?) {
   // ...
   Mapbox.getInstance(this, BuildConfig.MAPBOX_ACCESS_TOKEN)
