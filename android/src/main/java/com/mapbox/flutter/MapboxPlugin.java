@@ -116,7 +116,7 @@ public class MapboxPlugin implements MethodCallHandler {
     channel.setMethodCallHandler(new MapboxPlugin(registrar, registrar.view(), registrar.activity()));
   }
 
-  @TargetApi(Build.VERSION_CODES.N)
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("create")) {
