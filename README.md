@@ -15,7 +15,7 @@ Following examples use Mapbox vector tiles, which require a Mapbox account and a
 - Create a `local.properties` file with the following path: `$project_dir/android/local.properties`
 - Add `mapbox.accessToken="YOUR MAPBOX ACCESS TOKEN"`
  token to the **local.properties** file.
- 
+
 #### Demo app
 
 - Install [Flutter](https://flutter.io/get-started/) and validate its installation with `flutter doctor`
@@ -29,6 +29,11 @@ Following examples use Mapbox vector tiles, which require a Mapbox account and a
 - Add Mapbox dependency and read token value in Android module `build.gradle` file:
 ```
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
         // ...
         def mapboxAccessToken = localProperties.getProperty('mapbox.accessToken')
