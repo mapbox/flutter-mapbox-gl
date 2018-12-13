@@ -3,6 +3,9 @@ package com.mapbox.mapboxsdk.maps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.graphics.RectF;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.graphics.SurfaceTexture;
 
 import com.mapbox.mapboxsdk.geometry.ProjectedMeters;
@@ -12,6 +15,7 @@ import com.mapbox.mapboxsdk.maps.renderer.MapRenderer;
 import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
 import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 
 public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChangedListener {
   private final Context context;
@@ -138,11 +142,12 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
   }
 
   public LatLng getLatLng(PointF screenPoint){
-    return nativeMapView.latLngForPixel(screenPoint);
+    return nativeMapView.latLngForPixel(new PointF(screenPoint.x*getPixelRatio(), screenPoint.y*getPixelRatio()));
   }
 
   public PointF getScreenPoint(LatLng latLng){
-    return nativeMapView.pixelForLatLng(latLng);
+    PointF screenPoint = nativeMapView.pixelForLatLng(latLng);
+    return new PointF(screenPoint.x/getPixelRatio(),screenPoint.y/getPixelRatio());
   }
 
   public double getMinZoom() {
@@ -167,5 +172,19 @@ public class FlutterMap implements NativeMapView.ViewCallback, MapView.OnMapChan
 
   public void zoom(double zoom, PointF focalPoint, long duration) {
     nativeMapView.setZoom(zoom, focalPoint, duration);
+  }
+
+  public float getPixelRatio() {
+    return nativeMapView.getPixelRatio();
+  }
+
+  public java.util.List<com.mapbox.geojson.Feature> queryRenderedFeatures(@NonNull PointF coordinates, @Nullable String[] layerIds, @Nullable Expression filter){
+    PointF scaledCoordinates = new PointF(coordinates.x*getPixelRatio(), coordinates.y*getPixelRatio());
+    return nativeMapView.queryRenderedFeatures(scaledCoordinates,layerIds,filter);
+  }
+
+  public java.util.List<com.mapbox.geojson.Feature> queryRenderedFeatures(@NonNull RectF coordinates, @Nullable String[] layerIds, @Nullable Expression filter){
+    RectF scaledCoordinates = new RectF(coordinates.left*getPixelRatio(),coordinates.top*getPixelRatio(),coordinates.right*getPixelRatio(),coordinates.bottom*getPixelRatio());
+    return nativeMapView.queryRenderedFeatures(scaledCoordinates,layerIds,filter);
   }
 }

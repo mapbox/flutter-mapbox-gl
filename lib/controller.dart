@@ -420,6 +420,45 @@ class MapboxOverlayController {
     }
   }
 
+ Future<List> queryRenderedFeatures(
+      Offset offset, List<String> layerIds, String filter) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'queryRenderedFeatures',
+        <String, Object>{
+          'textureId': _textureId,
+          'x': offset.dx,
+          'y': offset.dy,
+          'layerIds': layerIds,
+          'filter': filter,
+        },
+      );
+      return reply['features'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<List> queryRenderedFeaturesInRect(Rect rect, List<String> layerIds, String filter) async {
+    try {
+      final Map<Object, Object> reply = await _channel.invokeMethod(
+        'queryRenderedFeatures',
+        <String, Object>{
+          'textureId': _textureId,
+          'left': rect.left,
+          'top': rect.top,
+          'right': rect.right,
+          'bottom': rect.bottom,
+          'layerIds': layerIds,
+          'filter': filter,
+        },
+      );
+      return reply['features'];
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+  
   Future<Null> dispose(int _textureId) async {
     try {
       await _channel.invokeMethod(

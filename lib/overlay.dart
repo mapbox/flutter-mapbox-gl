@@ -7,10 +7,11 @@ import 'package:flutter/widgets.dart';
 import 'package:mapbox_gl/controller.dart';
 
 class MapboxOverlay extends StatefulWidget {
-  MapboxOverlay({Key key, this.controller, this.options}) : super(key: key);
+  MapboxOverlay({Key key, this.controller, this.options, this.onTap}) : super(key: key);
 
   final MapboxOverlayController controller;
   final MapboxMapOptions options;
+  final void Function(LatLng coordinates, Offset point) onTap;
 
   @override
   State<StatefulWidget> createState() => new _MapboxOverlayState();
@@ -67,6 +68,7 @@ class _MapboxOverlayState extends State<MapboxOverlay> {
       }
 
       GestureDetector detector = new GestureDetector(
+        onTapUp: (details) => _onTapUp(context, details),
         onDoubleTap: _onDoubleTap,
         onScaleStart: _onScaleStart,
         onScaleUpdate: _onScaleUpdate,
@@ -75,6 +77,14 @@ class _MapboxOverlayState extends State<MapboxOverlay> {
       );
       return detector;
     });
+  }
+
+  /// Called when the user single taps the screen
+  void _onTapUp(BuildContext context, TapUpDetails tapUpDetails) async {
+    RenderBox getBox = context.findRenderObject();
+    Offset offset = getBox.globalToLocal(tapUpDetails.globalPosition);
+    LatLng coordinates = await widget.controller.getLatLngForOffset(offset);
+    widget?.onTap(coordinates, offset);
   }
 
   /// Called when the user double taps the screen, results in zooming the map
