@@ -1,11 +1,4 @@
-.DS_Store
-.atom/
-.idea
+android/.classpath
+android/.project
 .packages
-.pub/
-build/
-ios/.generated/
-packages
-pubspec.lock
-*.iml
-doc/
+.vscode/

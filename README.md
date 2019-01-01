@@ -26,38 +26,17 @@ Following examples use Mapbox vector tiles, which require a Mapbox account and a
 
 - Create new Flutter project in your IDE or via terminal
 - Add `mapbox_gl: ^0.0.1` dependency to `pubspec.yaml` file and [get the package](https://flutter.io/using-packages/#adding-a-package-dependency-to-an-app)
-- Add Mapbox dependency and read token value in Android module `build.gradle` file:
-```
-android {
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+- Add Mapbox read token value in the application manifest `android/app/src/main/AndroidManifest.xml`:
 
-    defaultConfig {
-        // ...
-        def mapboxAccessToken = localProperties.getProperty('mapbox.accessToken')
-        buildConfigField "String", "MAPBOX_ACCESS_TOKEN", "$mapboxAccessToken"
-    }
-}
+```xml
+<manifest ...
+  <application ...
+    <meta-data android:name="com.mapbox.token" android:value="YOUR_TOKEN_HERE" />
+```
 
-dependencies {
-    // ...
-    implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:6.1.0-SNAPSHOT"
-}
-```
-- Initialize Mapbox in Android `MainActivity` class:
-```
-override fun onCreate(savedInstanceState: Bundle?) {
-  // ...
-  Mapbox.getInstance(this, BuildConfig.MAPBOX_ACCESS_TOKEN)
-}
-```
 - Import Mapbox widgets and add them to your widget tree
 ```
-import 'package:mapbox_gl/controller.dart';
-import 'package:mapbox_gl/flutter_mapbox.dart';
-import 'package:mapbox_gl/overlay.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 ```
 
 ## Documentation
