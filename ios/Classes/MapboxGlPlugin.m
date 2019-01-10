@@ -1,11 +1,11 @@
-#import "FlutterMapboxPlugin.h"
+#import "MapboxGlPlugin.h"
 
-@implementation FlutterMapboxPlugin
+@implementation MapboxGlPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"flutter_mapbox"
+      methodChannelWithName:@"mapbox_gl"
             binaryMessenger:[registrar messenger]];
-  FlutterMapboxPlugin* instance = [[FlutterMapboxPlugin alloc] init];
+  MapboxGlPlugin* instance = [[MapboxGlPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
 }
 

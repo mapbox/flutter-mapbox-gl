@@ -1,4 +1,4 @@
-group 'com.example.fluttermapbox'
+group 'com.mapbox.mapboxgl'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -8,24 +8,19 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
-rootProject.allprojects { project ->
+rootProject.allprojects {
     repositories {
         google()
         jcenter()
         mavenCentral()
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
 
 apply plugin: 'com.android.library'
-
-ext {
-    mapboxSdkVersion = "6.1.0-SNAPSHOT"
-}
 
 android {
     compileSdkVersion 27
@@ -37,13 +32,11 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     dependencies {
-        implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:$mapboxSdkVersion"
+        implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1"
     }
 }
