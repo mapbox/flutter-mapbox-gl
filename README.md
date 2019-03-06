@@ -1,6 +1,8 @@
-# Flutter Mapbox GL Native
+> **Please note that this project has moved.** Please head to https://github.com/tobrun/flutter-mapbox-gl for updates.
 
-> **Please note that this project is experimental and is not officially supported.** We welcome [feedback](https://github.com/mapbox/flutter-mapbox-gl/issues) and contributions.
+---
+
+# Flutter Mapbox GL Native
 
 This Flutter plugin for [mapbox-gl-native](https://github.com/mapbox/mapbox-gl-native) enables
 embedded interactive and customizable vector maps inside of a Flutter widget. This project plugin is in early development stage. Only Android is supported for now.
