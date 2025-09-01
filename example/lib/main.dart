@@ -31,39 +31,39 @@ class MapboxExampleState extends State<MapboxExample> {
         ),
         Column(
           children: [
-            RaisedButton(
+            ElevatedButton(
               child: Text('Show User Location'),
               onPressed: () async {
                 //check permissions before this, or turn them on manually.
                 controller.showUserLocation();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('getStyle'),
               onPressed: () async {
                 print(await controller.getStyleUrl());
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('setStyle'),
               onPressed: () async {
                 controller.setStyleUrl("mapbox://styles/mapbox/satellite-v9");
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('at ease'),
               onPressed: () async {
                 // controller.easeTo(Camera(target: LatLng(lat: 32, lng: 35), zoom: 12), 2000);
                 controller.easeTo(Camera(target: LatLng(lat: 32, lng: 35)), 2000);
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('fly to'),
               onPressed: () async {
                 controller.flyTo(Camera(target: LatLng(lat: 32, lng: 35)), 2000);
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('zoom only'),
               onPressed: () async {
                 controller.zoom(10, 2000);
